@@ -1,0 +1,12 @@
+html {
+  /* 自定义深色背景颜色 */
+  --el-content-bg-color: #f5f5f5;
+  --el-box-color: #2b3035;
+  --el-border-colors: #d4d4dc;
+}
+html.dark {
+  /* 自定义深色背景颜色 */
+  --el-content-bg-color: #2b3035;
+  --el-box-color: #f5f5f5;
+  --el-border-colors: #555666;
+}
