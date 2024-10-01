@@ -2,7 +2,7 @@
  * @Author: Isteyft 14056025+isteyft@user.noreply.gitee.com
  * @Date: 2024-10-01 01:20:08
  * @LastEditors: Isteyft 14056025+isteyft@user.noreply.gitee.com
- * @LastEditTime: 2024-10-01 21:13:36
+ * @LastEditTime: 2024-10-01 21:20:08
  * @FilePath: \Isteyft-Boke\src\views\Home.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -81,7 +81,7 @@ onMounted(()=>{
     <div class="top">
       <div class="boke" v-for="item in topData" :key="item.bokeId" @click="GoBoke(item.bokeId)">
         <div>          
-          <el-image class="img" :src="item.imgurl ? item.wallpaper : getImageUrl()" />
+          <image class="img" :src="item.imgurl ? item.wallpaper : getImageUrl()" />
         </div>
         <div class="text">
           <h2>{{item.title}}</h2>
@@ -95,7 +95,7 @@ onMounted(()=>{
     <el-scrollbar class="bokes">
       <el-card shadow="always" class="boke" v-for="item in tableData" :key="item.bokeId" @click="GoBoke(item.bokeId)">
         <div>          
-          <el-image class="img" :src="item.imgurl ? item.wallpaper : getImageUrl()" />
+          <image class="img" :src="item.imgurl ? item.wallpaper : getImageUrl()" />
         </div>
         <div class="text">
           <h2>{{item.title}}</h2>
