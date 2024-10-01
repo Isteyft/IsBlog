@@ -65,7 +65,7 @@ http.interceptors.response.use(function (response) {
   }
   return response
 }, function (error) {
-  console.log(error);
+  // console.log(error);
   
   // 超出 2xx 范围的状态码都会触发该函数。
   // 对响应错误做点什么

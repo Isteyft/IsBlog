@@ -144,11 +144,10 @@ const onSubmit = () => {
 const handleEdit = (val) => {
   action.value = 'edit'
   dialogVisible.value = true
+  val.top = val.top === 'yes' ? 'true' : 'false';
   nextTick(()=>{
         Object.assign(bokeContent,{...val})
     })
-      // 根据后端返回的 yes/no 设置 top
-  bokeContent.top = val.top === 'yes';
 }
 
   // 编辑器实例，必须用 shallowRef，重要！
