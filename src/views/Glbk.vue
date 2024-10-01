@@ -214,7 +214,7 @@ onMounted(()=>{
       <el-row>
         <el-col :span="24">
           <el-form-item label="文章封面" prop="imgurl">
-            <el-input v-model="bokeContent.imgurl" placeholder="请输入图片链接" />
+            <el-input v-model="bokeContent.imgurl" placeholder="请输入图片链接"/>
           </el-form-item>
         </el-col>
       </el-row>
@@ -272,6 +272,29 @@ onMounted(()=>{
   .el-table{
     width: 100%;
     height: 500px;
+  }
+}
+.el-input{
+  width: 500px;
+}
+@media (min-width:1024px) {
+  .el-input{
+    width: 800px;
+  }
+}
+@media (max-width:1024px) {
+  .el-input{
+    width: 650px;
+  }
+}
+@media (max-width:768px) {
+  .el-input{
+    width: 500px;
+  }
+}
+@media (max-width:600px) {
+  .el-input{
+    width: 300px;
   }
 }
 .select-clearn {
