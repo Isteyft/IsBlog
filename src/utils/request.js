@@ -2,7 +2,7 @@
  * @Author: Isteyft 14056025+isteyft@user.noreply.gitee.com
  * @Date: 2024-09-22 01:19:36
  * @LastEditors: Isteyft 14056025+isteyft@user.noreply.gitee.com
- * @LastEditTime: 2024-09-25 02:36:02
+ * @LastEditTime: 2024-10-01 20:08:06
  * @FilePath: \Isteyft-Boke\src\utils\request.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -65,11 +65,13 @@ http.interceptors.response.use(function (response) {
   }
   return response
 }, function (error) {
+  console.log(error);
+  
   // 超出 2xx 范围的状态码都会触发该函数。
   // 对响应错误做点什么
   ElMessage.error(error.response.data.message || NETWORK_ERROR)
   if (error.status === 401) {
-    // location.href('https://isteyft.top/#/login')
+    return {code:401,msg:"error"}
   }
   return Promise.reject(error);
 });

@@ -4,8 +4,10 @@ import '@wangeditor/editor/dist/css/style.css';
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 // import { useRoute } from 'vue-router'
 import { ElMessage,ElMessageBox } from 'element-plus';
-import { GetBokeAPI,DelBokeAPI,UpdateBokeAPI,UploadBokeAPI } from "@/api/api";
+import { GetPlAPI,GetBokeAPI,DelBokeAPI,UpdateBokeAPI,UploadBokeAPI } from "@/api/api";
 import {useUserStore} from '@/stores/user'
+import { useRouter } from "vue-router";
+const router = useRouter()
 const store = useUserStore()
 const tableData = ref([])
 const tableLabel = reactive([
@@ -44,6 +46,11 @@ const formatTime = (isoString) => {
     return date.toLocaleString('default', options);
 }
 const getBokeData = async () => {
+  const test = await GetPlAPI(queryObj)
+  // console.log(data)
+  if (test.code === 401) {
+    router.push('/login')
+  }
   // console.log(config)
   const data = await GetBokeAPI(queryObj)
   // console.log(data)

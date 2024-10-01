@@ -5,6 +5,8 @@ import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 // import { useRoute } from 'vue-router'
 import { ElMessage,ElMessageBox } from 'element-plus';
 import { GetPlAPI,DelPlAPI,UpdatePlAPI } from "@/api/api";
+import { useRouter } from "vue-router";
+const router = useRouter()
 const tableData = ref([])
 const tableLabel = reactive([
   {
@@ -44,7 +46,10 @@ const formatTime = (isoString) => {
 const getPlData = async () => {
   // console.log(config)
   const data = await GetPlAPI(queryObj)
-  // console.log(data)
+  console.log(data)
+  if (data.code === 401) {
+    router.push('/login')
+  }
   tableData.value = data.data.pinlunlist.list
   queryObj.total = data.data.count
   tableData.value.forEach(item => {

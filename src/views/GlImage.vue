@@ -3,9 +3,11 @@ import { ref,getCurrentInstance,onMounted,reactive,nextTick } from "vue"
 import '@wangeditor/editor/dist/css/style.css';
 // import { useRoute } from 'vue-router'
 import { ElMessage,ElMessageBox } from 'element-plus';
-import { GetImageAPI,DelImageAPI,UpdateImageAPI } from "@/api/api";
+import { GetPlAPI,GetImageAPI,DelImageAPI,UpdateImageAPI } from "@/api/api";
 import { genFileId } from 'element-plus'
 import {useUserStore} from '@/stores/user'
+import { useRouter } from "vue-router";
+const router = useRouter()
 const store = useUserStore()
 const tableData = ref([])
 const tableLabel = reactive([
@@ -45,6 +47,11 @@ const formatTime = (isoString) => {
     return date.toLocaleString('default', options);
 }
 const getImageData = async () => {
+  const test = await GetPlAPI(queryObj)
+  // console.log(data)
+  if (test.code === 401) {
+    router.push('/login')
+  }
   // console.log(config)
   const data = await GetImageAPI(queryObj)
   // console.log(data)
