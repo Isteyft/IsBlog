@@ -116,6 +116,9 @@ const onSubmit = () => {
   proxy.$refs['contentBoke'].validate(async (vaild)=>{
     if (vaild) {
       bokeContent.username = store.userInfo.username
+      if (bokeContent.imgurl === null || bokeContent.imgurl === '') {
+        bokeContent.imgurl = 'https://isteyft.top/assets/bg1-Dsmlmim0.jpg'
+      }
       let res = null;
        if (action.value === 'add') {
         res = await UploadBokeAPI(bokeContent)
@@ -142,12 +145,10 @@ const handleEdit = (val) => {
   action.value = 'edit'
   dialogVisible.value = true
   nextTick(()=>{
-        //因为在第一次显示弹窗的时候form组件没有加载出来，如果直接对formUser赋值，这个值会作为form表单的初始值
-        //所以使用nextTick，赋值的操作在一个微任务中，这样就可以避免在from表单加载之前赋值
-
         Object.assign(bokeContent,{...val})
-        //这里需要改变sex数据类型，是因为el-option的value有类型的校验
     })
+      // 根据后端返回的 yes/no 设置 top
+  bokeContent.top = val.top === 'yes';
 }
 
   // 编辑器实例，必须用 shallowRef，重要！
