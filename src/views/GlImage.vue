@@ -125,7 +125,7 @@ const handleUploadSuccess = (val) => {
 }
 const handleUploadError = (val) => {
   res = val
-  console.log(res);
+  // console.log(res);
   ElMessage({
     showClose: true,
     message: "请输入正确的内容",

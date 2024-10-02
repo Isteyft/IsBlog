@@ -2,7 +2,7 @@
  * @Author: Isteyft 14056025+isteyft@user.noreply.gitee.com
  * @Date: 2024-10-01 01:20:08
  * @LastEditors: Isteyft 14056025+isteyft@user.noreply.gitee.com
- * @LastEditTime: 2024-10-01 21:20:08
+ * @LastEditTime: 2024-10-02 13:12:33
  * @FilePath: \Isteyft-Boke\src\views\Home.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -35,7 +35,7 @@ const getBokeData = async () => {
   tableData.value = data.data.bokelist.list
   topData.value = data1.data.topboke
   queryObj.total = data.data.count
-  console.log(topData.value);
+  // console.log(topData.value);
   
   tableData.value.forEach(item => {
       item.uploadTime = formatTime(item.uploadTime);
@@ -81,7 +81,7 @@ onMounted(()=>{
     <div class="top">
       <div class="boke" v-for="item in topData" :key="item.bokeId" @click="GoBoke(item.bokeId)">
         <div>          
-          <image class="img" :src="item.imgurl ? item.wallpaper : getImageUrl()" />
+          <img class="img" :alt="item.title+'的封面'" :src="item.imgurl ? item.imgurl : getImageUrl()" />
         </div>
         <div class="text">
           <h2>{{item.title}}</h2>
@@ -95,7 +95,7 @@ onMounted(()=>{
     <el-scrollbar class="bokes">
       <el-card shadow="always" class="boke" v-for="item in tableData" :key="item.bokeId" @click="GoBoke(item.bokeId)">
         <div>          
-          <image class="img" :src="item.imgurl ? item.wallpaper : getImageUrl()" />
+          <img class="img" :alt="item.title+'的封面'" :src="item.imgurl ? item.imgurl : getImageUrl()" />
         </div>
         <div class="text">
           <h2>{{item.title}}</h2>
@@ -175,7 +175,7 @@ onMounted(()=>{
     width: 100%;
     height: 100%;
     min-height: 718px;
-    margin-bottom: 50px;
+    margin-bottom: 100px;
     padding: 0;
     background-color: var(--el-content-bg-color);
     gap: 0;

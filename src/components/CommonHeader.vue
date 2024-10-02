@@ -2,7 +2,7 @@
  * @Author: Isteyft 14056025+isteyft@user.noreply.gitee.com
  * @Date: 2024-08-24 21:34:34
  * @LastEditors: Isteyft 14056025+isteyft@user.noreply.gitee.com
- * @LastEditTime: 2024-09-24 10:24:18
+ * @LastEditTime: 2024-10-02 00:59:37
  * @FilePath: \vue-m-system\src\components\CommonHeader.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -19,8 +19,11 @@ const handerCollapse = () => {
 }
 const router = useRouter()
 const handleLoginOut = () => {
-  // store.clean()
+  store.clearUserInfo()
   router.push('/login')
+}
+const GoHome = () => {
+  router.push('/home')
 }
 const current = computed(()=>store.state.currentMenu)
 const buttomIcon = ref('Menu')
@@ -46,6 +49,7 @@ onMounted(()=>{
         </span>
         <template #dropdown>
           <el-dropdown-menu>
+            <el-dropdown-item @click="GoHome">回到首页</el-dropdown-item>
             <el-dropdown-item @click="handleLoginOut">退出</el-dropdown-item>
           </el-dropdown-menu>
         </template>

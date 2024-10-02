@@ -2,7 +2,7 @@
  * @Author: Isteyft 14056025+isteyft@user.noreply.gitee.com
  * @Date: 2024-10-01 01:20:08
  * @LastEditors: Isteyft 14056025+isteyft@user.noreply.gitee.com
- * @LastEditTime: 2024-10-01 18:16:48
+ * @LastEditTime: 2024-10-02 01:51:18
  * @FilePath: \Isteyft-Boke\src\views\Home.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -54,6 +54,14 @@ const handleAdd = () => {
 }
 const { proxy } = getCurrentInstance(); // 获取当前组件实例的代理
 const onSubmit = () => {
+  if (bokeContent.txt === '') {
+    ElMessage({
+        showClose: true,
+        message: "请输入正确的内容",
+        type: "error",
+      })
+    return
+  }
   proxy.$refs['contentBoke'].validate(async (vaild)=>{
     if (vaild) {
       bokeContent.username = store.userInfo.username ? store.userInfo.username : '游客'
@@ -64,6 +72,12 @@ const onSubmit = () => {
         dialogVisible.value = false
         proxy.$refs['contentBoke'].resetFields()
         bokeContent.txt = ''
+        getBokeData()
+        ElMessage({
+        showClose: true,
+        message: "发布成功",
+        type: "success",
+      })
       }
     } else {
       ElMessage({
@@ -78,7 +92,17 @@ const onSubmit = () => {
 const bokeContent = reactive({
   txt: ''
 })
+const validateContent = (rule, value, callback) => {
+  if (value.trim() === '') {
+    callback(new Error('内容不能为空'));
+  } else {
+    callback();
+  }
+};
 
+const rules = reactive({
+  txt: [{ required: true,validator: validateContent, message: '内容是必填项' }]
+})
   // 编辑器实例，必须用 shallowRef，重要！
   const mode = ref('default')
   const editorRef = shallowRef()
@@ -121,15 +145,12 @@ onMounted(()=>{
         <div clss="pls">
           <div class="pinlun" v-for="item in pinlunData" :key="item.plid">
             <div>          
-              <el-image :fit="fit" class="img" src="https://isteyft.top:3000/ServerImage/assets/user.png" />
+              <el-image class="img" src="https://isteyft.top:3000/ServerImage/assets/user.png" />
             </div>
             <div class="text">
               <h2>{{item.username}}</h2>
               <span>{{item.uploadTime}}</span>
               <div class="content" v-html="item.txt"></div>
-            </div>
-            <div class="topicon">
-              <component class="icons" :is="CaretTop"></component>
             </div>
           </div>
         </div>

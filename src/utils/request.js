@@ -2,7 +2,7 @@
  * @Author: Isteyft 14056025+isteyft@user.noreply.gitee.com
  * @Date: 2024-09-22 01:19:36
  * @LastEditors: Isteyft 14056025+isteyft@user.noreply.gitee.com
- * @LastEditTime: 2024-10-01 20:08:06
+ * @LastEditTime: 2024-10-02 01:08:13
  * @FilePath: \Isteyft-Boke\src\utils\request.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -32,7 +32,7 @@ http.interceptors.request.use(function (config) {
   return config
 }, function (error) {
   // 对请求错误做些什么
-  console.log(error);
+  // console.log(error);
   return Promise.reject(error);
 });
 

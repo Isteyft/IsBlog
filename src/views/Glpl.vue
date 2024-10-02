@@ -46,7 +46,7 @@ const formatTime = (isoString) => {
 const getPlData = async () => {
   // console.log(config)
   const data = await GetPlAPI(queryObj)
-  console.log(data)
+  // console.log(data)
   if (data.code === 401) {
     router.push('/login')
   }
@@ -72,7 +72,7 @@ const handleChange1 = (page) => {
 //删除
 const handleDelete = (val) => {
   ElMessageBox.confirm("你确认要删除吗").then(async ()=>{
-    await DelPlAPI(val.bokeId)
+    await DelPlAPI(val.plid)
     ElMessage({
       showClose:true,
       message:'删除成功',
@@ -99,6 +99,14 @@ const handleCancel = () => {
   dialogVisible.value = false
 }
 const onSubmit = () => {
+  if (bokeContent.txt === '') {
+    ElMessage({
+        showClose: true,
+        message: "请输入正确的内容",
+        type: "error",
+      })
+    return
+  }
   proxy.$refs['contentBoke'].validate(async (vaild)=>{
     if (vaild) {
       let res = null;
@@ -108,8 +116,12 @@ const onSubmit = () => {
       if (res) {
         dialogVisible.value = false
         proxy.$refs['contentBoke'].resetFields()
-        bokeContent.txt = ''
         getPlData()
+        ElMessage({
+        showClose: true,
+        message: "修改成功",
+        type: "success",
+      })
       }
     } else {
       ElMessage({

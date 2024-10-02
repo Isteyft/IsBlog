@@ -113,6 +113,14 @@ const handleAdd = () => {
   dialogVisible.value = true
 }
 const onSubmit = () => {
+  if (bokeContent.txt === '') {
+    ElMessage({
+        showClose: true,
+        message: "请输入正确的内容",
+        type: "error",
+      })
+    return
+  }
   proxy.$refs['contentBoke'].validate(async (vaild)=>{
     if (vaild) {
       bokeContent.username = store.userInfo.username
@@ -129,8 +137,12 @@ const onSubmit = () => {
       if (res) {
         dialogVisible.value = false
         proxy.$refs['contentBoke'].resetFields()
-        bokeContent.txt = ''
         getBokeData()
+        ElMessage({
+        showClose: true,
+        message: "修改成功",
+        type: "success",
+      })
       }
     } else {
       ElMessage({
