@@ -2,7 +2,7 @@
  * @Author: Isteyft 14056025+isteyft@user.noreply.gitee.com
  * @Date: 2024-10-01 01:20:08
  * @LastEditors: Isteyft 14056025+isteyft@user.noreply.gitee.com
- * @LastEditTime: 2024-10-04 12:43:04
+ * @LastEditTime: 2024-10-04 14:04:34
  * @FilePath: \Isteyft-Boke\src\views\Home.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -18,6 +18,7 @@ import {useUserStore} from '@/stores/user'
 const store = useUserStore()
 const router = useRouter()
 const route = useRoute()
+const loading = ref(true)
 const id = route.params.id
 const formatTime = (isoString) => {
     const date = new Date(isoString);
@@ -27,6 +28,7 @@ const formatTime = (isoString) => {
 const bokeData = ref({})
 const pinlunData = ref([])
 const getBokeData = async () => {
+  loading.value = true
   const data = await GetBokeIdAPI(id)
   const data1 = await GetBokePlAPI(id)
   bokeData.value = data.data.boke
@@ -37,6 +39,7 @@ const getBokeData = async () => {
   pinlunData.value.forEach(item => {
       item.uploadTime = formatTime(item.uploadTime);
   });
+  loading.value = false
 }
 const Back = ref('Back')
 const GoBack = () => {
@@ -132,31 +135,63 @@ onMounted(()=>{
       </el-button>
     </div>
     <el-scrollbar class="containter">
-      <div class="boke">
-        <h2>{{bokeData.title ? bokeData.title : ''}}</h2>
-        <h3 class="time">{{bokeData.loadTime ? bokeData.loadTime : ''}}</h3>
-        <div class="content" v-html="bokeData.txt"></div>
-      </div>
+      <el-skeleton :loading="loading" animated :throttle="500">
+        <template #template>
+          <div class="boke">
+            <el-skeleton-item variant="h2" style="width: 20%;margin-left:40%;text-align: center;"/><br/>
+            <el-skeleton-item variant="h3" style="width: 20%;margin-left:40%;margin-top:10px;text-align: center;" /><br/>
+            <el-skeleton-item variant="span" style="width: 200px;" />
+            <el-skeleton-item variant="span" style="width: 400px;" />
+            <el-skeleton-item variant="span" style="width: 300px;" />
+            <el-skeleton-item variant="span" style="width: 200px;" />
+            <el-skeleton-item variant="span" style="width: 400px;" />
+            <el-skeleton-item variant="span" style="width: 300px;" />
+          </div>
+        </template>
+        <template #default>
+          <div class="boke">
+            <h2>{{bokeData.title ? bokeData.title : ''}}</h2>
+            <h3 class="time">{{bokeData.loadTime ? bokeData.loadTime : ''}}</h3>
+            <div class="content" v-html="bokeData.txt"></div>
+          </div>
+        </template>
+      </el-skeleton>
       <div class="pl">
+        <h2>评论区域：</h2>
         <el-button class="plbuttom primary" @click="handleAdd()">
           <component class="icons" :is="Back"></component>
           评论
         </el-button>
         <div clss="pls">
-          <div class="pinlun" v-for="item in pinlunData" :key="item.plid">
-            <div>          
-              <el-image class="img" src="https://isteyft.top:3000/ServerImage/assets/user.png" />
-            </div>
-            <div class="text">
-              <h2>{{item.username}}</h2>
-              <span>{{item.uploadTime}}</span>
-              <div class="content" v-html="item.txt"></div>
-            </div>
-          </div>
+          <el-skeleton :loading="loading" animated :throttle="500" :count="3">
+            <template #template>
+              <div class="pinlun">
+                <div>
+                  <el-skeleton-item variant="image" style="width:36px;height:36px;border-radius: 50%;" />          
+                </div>
+                <div class="text">
+                  <el-skeleton-item variant="h2" style="width: 50px;height:12px;"/><br/>
+                  <el-skeleton-item variant="span" style="width: 70px;height:8px;" /><br/>
+                  <el-skeleton-item variant="span" style="width: 200px;" />
+                </div>
+              </div>
+            </template>
+            <template #default>
+              <div class="pinlun" v-for="item in pinlunData" :key="item.plid">
+                <div>          
+                  <el-image class="img" src="https://isteyft.top:3000/ServerImage/assets/user.png" />
+                </div>
+                <div class="text">
+                  <h2>{{item.username}}</h2>
+                  <span>{{item.uploadTime}}</span>
+                  <div class="content" v-html="item.txt"></div>
+                </div>
+              </div>
+            </template>
+          </el-skeleton>
         </div>
       </div>
     </el-scrollbar>
-
     <el-dialog
     v-model="dialogVisible"
     title="新增评论"
@@ -235,6 +270,15 @@ img,video {
     }
   }
 }
+.pl {
+  margin-top: 15px;
+  padding: 5px;
+  border-top: 3px solid #f0f0f2;
+  h2 {
+    font-size: 1em;
+    font-weight: 500;
+  }
+}
 .plbuttom {
   margin-top: 20px;
   margin-bottom: 20px;
@@ -271,12 +315,14 @@ img,video {
     margin-bottom: 50px;
     background-color: var(--el-content-bg-color);
   }
+  .pl {
+    border-top: 2px solid #d4caca;
+  }
   .pinlun {
     margin: 0 auto;
     width: 100%;
     display: flex;
     padding: 10px;
-    background: #fff;
   }
 }
 </style>

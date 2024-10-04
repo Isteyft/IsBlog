@@ -2,7 +2,7 @@
  * @Author: Isteyft 14056025+isteyft@user.noreply.gitee.com
  * @Date: 2024-10-01 01:20:08
  * @LastEditors: Isteyft 14056025+isteyft@user.noreply.gitee.com
- * @LastEditTime: 2024-10-02 13:12:33
+ * @LastEditTime: 2024-10-04 13:36:15
  * @FilePath: \Isteyft-Boke\src\views\Home.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -11,6 +11,7 @@ import { ref,onMounted,reactive } from "vue"
 import { GetBokeAPI, GetTopAPI } from "@/api/api";
 import { useRouter } from "vue-router";
 const router = useRouter()
+const loading = ref(true)
 const formInline = reactive({
   keyWord: ''
 })
@@ -29,6 +30,7 @@ const formatTime = (isoString) => {
 const tableData = ref([])
 const topData = ref([])
 const getBokeData = async () => {
+  loading.value = true
   const data = await GetBokeAPI(queryObj)
   const data1 = await GetTopAPI()
   // console.log(data1);
@@ -43,6 +45,7 @@ const getBokeData = async () => {
   topData.value.forEach(item => {
       item.uploadTime = formatTime(item.uploadTime);
   });
+  loading.value = false
 }
 const getImageUrl = () => {
   return new URL(`@/assets/images/bg1.jpg`,import.meta.url).href
@@ -78,31 +81,68 @@ onMounted(()=>{
         </el-form-item>
       </el-form>
     </div>
-    <div class="top">
-      <div class="boke" v-for="item in topData" :key="item.bokeId" @click="GoBoke(item.bokeId)">
-        <div>          
-          <img class="img" :alt="item.title+'的封面'" :src="item.imgurl ? item.imgurl : getImageUrl()" />
-        </div>
-        <div class="text">
-          <h2>{{item.title}}</h2>
-          <span>{{item.uploadTime}}</span>
-        </div>
-        <div class="topicon">
-          <component class="icons" :is="CaretTop"></component>
+    <el-skeleton :loading="loading" animated :throttle="500">
+      <template #template>
+      <div class="top">
+        <div class="boke">
+          <div>          
+            <el-skeleton-item variant="image" style="width:10vw;height:10vh;" />
+          </div>
+          <div class="text">
+            <el-skeleton-item variant="h2" style="width: 50px" />
+            <el-skeleton-item variant="span" style="margin-top: 10px;width: 100px" />
+          </div>
+          <div class="topicon">
+            <component class="icons" :is="CaretTop"></component>
+          </div>
         </div>
       </div>
-    </div>
-    <el-scrollbar class="bokes">
-      <el-card shadow="always" class="boke" v-for="item in tableData" :key="item.bokeId" @click="GoBoke(item.bokeId)">
-        <div>          
-          <img class="img" :alt="item.title+'的封面'" :src="item.imgurl ? item.imgurl : getImageUrl()" />
+    </template>
+    <template #default>
+      <div class="top">
+        <div class="boke" v-for="item in topData" :key="item.bokeId" @click="GoBoke(item.bokeId)">
+          <div>          
+            <img class="img" :alt="item.title+'的封面'" :src="item.imgurl ? item.imgurl : getImageUrl()" />
+          </div>
+          <div class="text">
+            <h2>{{item.title}}</h2>
+            <span>{{item.uploadTime}}</span>
+          </div>
+          <div class="topicon">
+            <component class="icons" :is="CaretTop"></component>
+          </div>
         </div>
-        <div class="text">
-          <h2>{{item.title}}</h2>
-          <span>最后修改时间:{{item.uploadTime}}</span>
-        </div>
-      </el-card>
-    </el-scrollbar>
+      </div>
+    </template>
+    </el-skeleton>
+    <el-skeleton :loading="loading" animated :throttle="500" :count="3">
+      <template #template>
+        <el-scrollbar class="bokes">
+          <el-card shadow="always" class="boke">
+            <div>          
+              <el-skeleton-item variant="image" style="width:10vw;height:10vh;" />
+            </div>
+            <div class="text">
+              <el-skeleton-item variant="h2" style="width: 50px" />
+              <el-skeleton-item variant="span" style="margin-top: 10px;width: 100px" />
+            </div>
+          </el-card>
+        </el-scrollbar>
+      </template>
+      <template #default>
+        <el-scrollbar class="bokes">
+          <el-card shadow="always" class="boke" v-for="item in tableData" :key="item.bokeId" @click="GoBoke(item.bokeId)">
+            <div>          
+              <img class="img" :alt="item.title+'的封面'" :src="item.imgurl ? item.imgurl : getImageUrl()" />
+            </div>
+            <div class="text">
+              <h2>{{item.title}}</h2>
+              <span>最后修改时间:{{item.uploadTime}}</span>
+            </div>
+          </el-card>
+        </el-scrollbar>
+      </template>
+    </el-skeleton>
     <el-pagination class="paper" :default-page-size="queryObj.pageSize" layout="prev,pager,next" size="small" :total="queryObj.total" @current-change="handleChange1"/>
   </div>
 </template>
