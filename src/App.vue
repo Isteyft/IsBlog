@@ -19,7 +19,7 @@ import { RouterView } from 'vue-router'
   transition-duration: 1000ms;
   background-color: var(--el-content-bg-color);
   width: 100%;
-  overflow: hidden;
+  overflow: auto;
   height: 100%;
 }
 </style>

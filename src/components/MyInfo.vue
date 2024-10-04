@@ -2,19 +2,24 @@
  * @Author: Isteyft 14056025+isteyft@user.noreply.gitee.com
  * @Date: 2024-08-24 21:34:34
  * @LastEditors: Isteyft 14056025+isteyft@user.noreply.gitee.com
- * @LastEditTime: 2024-10-01 01:11:07
+ * @LastEditTime: 2024-10-04 12:47:03
  * @FilePath: \vue-m-system\src\components\CommonHeader.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <script setup>
+import { useRouter } from "vue-router";
+const router = useRouter()
 const getImageUrl = (user) => {
   return new URL(`../assets/images/${user}.jpg`,import.meta.url).href
 } 
+const goBack = () => {
+  router.go(-1)
+}
 </script>
 
 <template>
   <div class="header">
-    <span class="content-user">
+    <span class="content-user" @click="goBack()">
       <img :src="getImageUrl('user')" class="user" />
     </span>
     <div class="content-text">
