@@ -152,7 +152,7 @@ onMounted(()=>{
           <div class="boke">
             <h2>{{bokeData.title ? bokeData.title : ''}}</h2>
             <h3 class="time">{{bokeData.loadTime ? bokeData.loadTime : ''}}</h3>
-            <div class="content" v-html="bokeData.txt"></div>
+            <div class="content editor-content-view" v-html="bokeData.txt"></div>
           </div>
         </template>
       </el-skeleton>
@@ -184,7 +184,7 @@ onMounted(()=>{
                 <div class="text">
                   <h2>{{item.username}}</h2>
                   <span>{{item.uploadTime}}</span>
-                  <div class="content" v-html="item.txt"></div>
+                  <div class="content editor-content-view" v-html="item.txt"></div>
                 </div>
               </div>
             </template>

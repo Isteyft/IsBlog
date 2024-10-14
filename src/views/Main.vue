@@ -2,7 +2,7 @@
  * @Author: Isteyft 14056025+isteyft@user.noreply.gitee.com
  * @Date: 2024-09-23 23:01:35
  * @LastEditors: Isteyft 14056025+isteyft@user.noreply.gitee.com
- * @LastEditTime: 2024-10-02 01:04:01
+ * @LastEditTime: 2024-10-09 18:10:40
  * @FilePath: \Isteyft-Boke\src\views\Main.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -40,13 +40,13 @@ const handleView = () => {
         </el-main>
       </el-container>
     </el-container>
-    <el-button class="visbuttom" size="default" @click="handleView">
-      <component class="icons" :is="VisIcon"></component>
-    </el-button>
-    <el-button class="darkbuttom" size="default" @click="handleDark">
-      <component class="icons" :is="buttomIcon"></component>
-    </el-button>
   </div>
+  <el-button class="visbuttom" size="default" @click="handleView">
+    <component class="icons" :is="VisIcon"></component>
+  </el-button>
+  <el-button class="darkbuttom" size="default" @click="handleDark">
+    <component class="icons" :is="buttomIcon"></component>
+  </el-button>
 </template>
 
 <style scoped lang="less">
@@ -74,10 +74,11 @@ const handleView = () => {
   margin-top: 10px;
 }
 .visbuttom {
+  position: fixed;
   transition-duration: 1000ms;
   position: absolute;
   bottom: 140px;
-  right: 10px;
+  right: 20px;
   padding: 10px;
   border-radius: 50%;
   height: 40px;
@@ -88,10 +89,11 @@ const handleView = () => {
   }
 }
 .darkbuttom {
+  position: fixed;
   transition-duration: 1000ms;
   position: absolute;
   bottom: 100px;
-  right: 10px;
+  right: 20px;
   padding: 10px;
   border-radius: 50%;
   height: 40px;

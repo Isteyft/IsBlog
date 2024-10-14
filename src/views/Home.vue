@@ -176,6 +176,7 @@ onMounted(()=>{
   margin: 10px auto;
   box-sizing: border-box;
   border-bottom: 1px solid #f0f0f2;
+  background: var(--el-bg-color-overlay);
   .img {
     max-width: 10vw;
     max-height: 10vh;
