@@ -48,7 +48,7 @@ export const UploadBokeAPI = (params) => {
   return http({
     url: '/v2/boke/upload',
     method: 'POST',
-    params
+    data: params
   })
 }
 //更新博客
@@ -56,7 +56,7 @@ export const UpdateBokeAPI = (formData) => {
   return http({
     url: '/v2/boke/update',
     method: 'PUT',
-    params: formData
+    data: formData
   })
 }
 //删除博客
@@ -92,7 +92,7 @@ export const UploadPlAPI = (formData) => {
   return http({
     url: '/v1/boke/uploadpl',
     method: 'POST',
-    params: formData
+    data: formData
   })
 }
 //更新评论
@@ -100,7 +100,7 @@ export const UpdatePlAPI = (formData) => {
   return http({
     url: '/v2/boke/updatepl',
     method: 'PUT',
-    params: formData
+    data: formData
   })
 }
 //删除评论

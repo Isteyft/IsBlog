@@ -68,7 +68,7 @@ const onSubmit = () => {
   proxy.$refs['contentBoke'].validate(async (vaild)=>{
     if (vaild) {
       bokeContent.username = store.userInfo.username ? store.userInfo.username : '游客'
-      bokeContent.bokeid = id
+      bokeContent.bokeId = id
       let res = null;
       res = await UploadPlAPI(bokeContent)
       if (res) {
