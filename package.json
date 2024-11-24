@@ -21,6 +21,7 @@
     "pinia-plugin-persist": "^1.0.0",
     "pinia-plugin-persistedstate": "^4.0.2",
     "pnpm": "^9.11.0",
+    "prismjs": "^1.29.0",
     "sass": "^1.79.3",
     "scss": "^0.2.4",
     "vue": "^3.5.7",

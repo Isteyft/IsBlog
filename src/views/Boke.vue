@@ -15,6 +15,14 @@ import '@wangeditor/editor/dist/css/style.css';
 import { ElMessage } from 'element-plus';
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import {useUserStore} from '@/stores/user'
+import Prism from "prismjs"//代码高亮core
+import "prismjs/plugins/line-numbers/prism-line-numbers.min.js"//行号插件
+import "prismjs/themes/prism-tomorrow.min.css"//高亮主题
+import "prismjs/plugins/line-numbers/prism-line-numbers.min.css"//行号插件的样式
+import "prismjs/plugins/toolbar/prism-toolbar.css"//行号插件的样式
+import "prismjs/plugins/toolbar/prism-toolbar.js"//行号插件的样式
+import "prismjs/plugins/show-language/prism-show-language.js"//行号插件的样式
+import "prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.js"//行号插件的样式
 const store = useUserStore()
 const router = useRouter()
 const route = useRoute()
@@ -110,6 +118,10 @@ const rules = reactive({
   const mode = ref('default')
   const editorRef = shallowRef()
   const toolbarConfig = {};
+  toolbarConfig.excludeKeys = [
+    'uploadImage',
+    'uploadVideo',
+]
   const editorConfig = { placeholder: '请输入内容...' };
   // 组件销毁时，也及时销毁编辑器，重要！
   onBeforeUnmount(() => {
@@ -121,8 +133,9 @@ const rules = reactive({
   const handleCreated = (editor) => {
     editorRef.value = editor; // 记录 editor 实例，重要！
   }
-onMounted(()=>{
-  getBokeData()
+onMounted(async ()=>{
+  await getBokeData()
+  Prism.highlightAll()
 })
 </script>
 
@@ -152,7 +165,7 @@ onMounted(()=>{
           <div class="boke">
             <h2>{{bokeData.title ? bokeData.title : ''}}</h2>
             <h3 class="time">{{bokeData.loadTime ? bokeData.loadTime : ''}}</h3>
-            <div class="content editor-content-view" v-html="bokeData.txt"></div>
+            <div class="content editor-content-view line-numbers" data-plugin-header="show-language" data-prismjs-copy="复制" data-prismjs-copy-success="复制成功" data-prismjs-copy-error="复制失败" data-prismjs-copy-timeout="超时" v-html="bokeData.txt"></div>
           </div>
         </template>
       </el-skeleton>

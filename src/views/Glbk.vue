@@ -166,6 +166,10 @@ const handleEdit = (val) => {
   const mode = ref('default')
   const editorRef = shallowRef()
   const toolbarConfig = {};
+  toolbarConfig.excludeKeys = [
+    'uploadImage',
+    'uploadVideo',
+]
   const editorConfig = { placeholder: '请输入内容...' };
   // 组件销毁时，也及时销毁编辑器，重要！
   onBeforeUnmount(() => {
