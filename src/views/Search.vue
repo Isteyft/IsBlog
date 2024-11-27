@@ -8,10 +8,10 @@
 -->
 <script setup>
 import { ref,onMounted } from "vue"
-// import { ref,onMounted,reactive } from "vue"
-import { GetBokeAPI, GetTopAPI } from "@/api/api";
-import { useRouter } from "vue-router";
+import { GetBokeAPI } from "@/api/api";
+import { useRouter, useRoute } from "vue-router";
 const router = useRouter()
+const route = useRoute()
 const loading = ref(true)
 const queryObj = {
   username: '',
@@ -20,28 +20,25 @@ const queryObj = {
   ss: '',
   total: 0
 }
+queryObj.ss = route.params.ss
 const formatTime = (isoString) => {
     const date = new Date(isoString);
     const options = { year: 'numeric', month: 'long', day: 'numeric'};
     return date.toLocaleString('default', options);
 }
 const tableData = ref([])
-const topData = ref([])
 const getBokeData = async () => {
+  
   loading.value = true
   const data = await GetBokeAPI(queryObj)
-  const data1 = await GetTopAPI()
-  // console.log(data1);
-  tableData.value = data.data.bokelist.list
-  topData.value = data1.data.topboke
-  queryObj.total = data.data.count
-  // console.log(topData.value);
+  console.log(data);
   
+  tableData.value = data.data.bokelist.list
+  queryObj.total = data.data.count
+  console.log(queryObj);
+  console.log(tableData.value);
   tableData.value.forEach(item => {
       item.uploadTime = formatTime(item.uploadTime);
-  });
-  topData.value.forEach(item => {
-      item.loadTime = formatTime(item.loadTime);
   });
   loading.value = false
 }
@@ -55,7 +52,6 @@ const handleChange1 = (page) => {
 const GoBoke = (id) => {
   router.push(`/boke/${id}`)
 }
-const CaretTop = ref('CaretTop')
 onMounted(()=>{
   getBokeData()
 })
@@ -63,50 +59,6 @@ onMounted(()=>{
 
 <template>
   <div class="main">
-    <el-skeleton :loading="loading" animated :throttle="500">
-      <template #template>
-      <div class="top">
-        <el-skeleton-item variant="h1" style="width: 50px;height: 50px;" />
-        <article class="boke">
-          <div class="topicon">
-            <component class="icons" :is="CaretTop"></component>
-          </div>
-          <div class="content">
-            <div class="text">
-              <el-skeleton-item variant="h2" style="width: 50px" />
-              <el-skeleton-item variant="span" style="margin-top: 10px;width: 60px" />
-              <el-skeleton-item variant="span" style="margin-top: 10px;width: 40px" />
-              <el-skeleton-item variant="span" style="margin-top: 10px;width: 100px" />
-            </div>
-            <div>          
-              <el-skeleton-item variant="image" style="width:120px;height:120px;" />
-            </div>
-          </div>
-        </article>
-      </div>
-    </template>
-    <template #default>
-      <div class="top">
-        <h1 class="top-title title">置顶文章</h1>
-        <article class="boke" v-for="item in topData" :key="item.bokeId" @click="GoBoke(item.bokeId)">
-          <div class="topicon">
-            <component class="icons" :is="CaretTop"></component>
-          </div>
-          <div class="content">
-            <div class="text">
-              <h2>{{item.title}}</h2>
-              <span><a href="https://www.isteyft.top">Isteyft</a> - <span class="tag">{{item.tag}}</span></span>
-              <span>{{item.visit}}次阅读</span>
-              <span>{{item.loadTime}}</span>
-            </div>
-            <div>          
-              <img class="img" :alt="item.title+'的封面'" :src="item.imgurl ? item.imgurl : getImageUrl()" />
-            </div>
-          </div>
-        </article>
-      </div>
-    </template>
-    </el-skeleton>
     <el-skeleton :loading="loading" animated :throttle="500" :count="3">
       <template #template>
         <div class="bokes">
@@ -128,20 +80,21 @@ onMounted(()=>{
       </template>
       <template #default>
         <div class="bokes notopboke">
-          <h1 class="top-title title">所有文章</h1>
-          <article class="boke notop" v-for="item in tableData" :key="item.bokeId" @click="GoBoke(item.bokeId)">
-            <div class="content">
-              <div class="text">
-                <h2>{{item.title}}</h2>
-                <span><a href="https://www.isteyft.top">Isteyft</a> - <span class="tag">{{item.tag}}</span></span>
-                <span>{{item.visit}}次阅读</span>
-                <span>最后修改时间:{{item.uploadTime}}</span>
+          <h1 class="top-title title">搜索结果</h1>
+            <h2 v-if="tableData.length === 0" class="title2">没有相关内容</h2>
+            <article class="boke notop" v-for="item in tableData" :key="item.bokeId" @click="GoBoke(item.bokeId)">
+              <div class="content">
+                <div class="text">
+                  <h2>{{item.title}}</h2>
+                  <span><a href="https://www.isteyft.top">Isteyft</a> - <span class="tag">{{item.tag}}</span></span>
+                  <span>{{item.visit}}次阅读</span>
+                  <span>最后修改时间:{{item.uploadTime}}</span>
+                </div>
+                <div>          
+                  <img class="img" :alt="item.title+'的封面'" :src="item.imgurl ? item.imgurl : getImageUrl()" />
+                </div>
               </div>
-              <div>          
-                <img class="img" :alt="item.title+'的封面'" :src="item.imgurl ? item.imgurl : getImageUrl()" />
-              </div>
-            </div>
-          </article>
+            </article>
         </div>
       </template>
     </el-skeleton>
@@ -157,7 +110,6 @@ onMounted(()=>{
   display: flex;
   flex-direction: column;
   min-width: 380px;
-  //max-height: 500px;
   background: var(--el-bg-color);
   gap: 10px;
 }
@@ -167,10 +119,11 @@ onMounted(()=>{
   text-align: center;
   font-size: 2em;
 }
-.serach {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
+.title2 {
+  margin: 20px auto;
+  color: var(--el-text-color);
+  text-align: center;
+  font-size: 1.5em;
 }
 .bokes {
   display: flex;
@@ -242,30 +195,24 @@ onMounted(()=>{
     width: 100%;
     height: 100%;
     min-height: 1080px;
-    background-color: var(--el-content-phone-bg-color);
     padding: 0;
+    background-color: var(--el-content-phone-bg-color);
     gap: 0;
   }
   .serach {
     margin-top:10px;
   }
-  .bokes {
-    height: 100%;
-  }
   .boke {
+    background-color: var(--el-boke-phone-bg-color);
     border: 1px solid var(--el-bg-color);
     margin: 0;
     padding: 0;
-    background-color: var(--el-boke-phone-bg-color);
     h2 {
       font-weight: normal;
     }
   }
-  .top {
-    border-bottom: 1px solid var(--el-border-colors);
-  }
   .paper {
-    margin: 20px auto;
+    margin-top: 20px;
   }
 }
 </style>

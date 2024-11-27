@@ -2,15 +2,29 @@ html {
   /* 自定义浅色背景颜色 */
   --el-content-bg-color: #f5f5f5;
   --el-box-color: #2b3035;
+  --el-content-phone-bg-color: rgba(253, 253, 253, 0.5);
+  --el-boke-phone-bg-color: rgba(255, 255, 255, 0.8);
   --el-border-colors: #d4d4dc;
   --editor-code: #eee;
   --editor-blockquote: #f1f1f1;
+  --header-bg-color: #ab82ff;
+  --header-font-color: #ffffff;
+  --header-border-color: #ffffff;
+  --Main-background-color: #ffefdb;
+  --background-img: url("@/assets/Images/bg1.png");
 }
 html.dark {
   /* 自定义深色背景颜色 */
   --el-content-bg-color: #2b3035;
   --el-box-color: #f5f5f5;
+  --el-content-phone-bg-color: rgba(43, 48, 53, 0.5);
+  --el-boke-phone-color: rgba(29, 30, 31, 0.8);
   --el-border-colors: #555666;
   --editor-code: #2c2c2c;
   --editor-blockquote: #1a1a1a;
+  --header-bg-color: #5d478b;
+  --header-font-color: #bebebe;
+  --header-border-color: #bebebe;
+  --Main-background-color: #8b795e;
+  --background-img: url("@/assets/Images/bg2.png");
 }

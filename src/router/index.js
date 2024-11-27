@@ -22,6 +22,31 @@ const router = createRouter({
           component: () => import('@/views/Home.vue'),
         },
         {
+          path: '/skill',
+          name: 'skill',
+          component: () => import('@/views/Skill.vue'),
+        },
+        {
+          path: '/day',
+          name: 'day',
+          component: () => import('@/views/Day.vue'),
+        },
+        {
+          path: '/note',
+          name: 'note',
+          component: () => import('@/views/Note.vue'),
+        },
+        {
+          path: '/me',
+          name: 'me',
+          component: () => import('@/views/Me.vue'),
+        },
+        {
+          path: '/search/:ss',
+          name: 'search',
+          component: () => import('@/views/Search.vue'),
+        },
+        {
           path: '/boke/:id',
           name: 'boke',
           component: () => import('@/views/Boke.vue'),

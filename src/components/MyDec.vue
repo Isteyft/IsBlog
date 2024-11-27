@@ -7,10 +7,22 @@
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <script setup>
+const getImageUrl = (user) => {
+  return new URL(`../assets/images/${user}.jpg`,import.meta.url).href
+} 
 </script>
 
 <template>
   <div class="containter">
+    <div class="me mycard">
+      <div class="userIcon">
+        <img :src="getImageUrl('user')" class="user" />
+      </div>
+      <div class="userInfo">
+        <h1>鬼灯明里</h1>
+        <p>技术宅，大懒人一个</p>
+      </div>
+    </div> 
     <el-card class="friend mycard">
       <template #header>
         <div class="card-header">
@@ -57,10 +69,49 @@
 }
 .mycard {
   width: 200px;
+  border-radius: 10px;
+  padding: 0;
+  background: var(--el-bg-color);
+}
+.me {
+  text-align: center;
+  padding: 10px;
+  .userIcon {
+    .user {
+      border-radius: 10px;
+      width: 150px;
+      height: 150px;
+    }
+  }
+  .userInfo {
+    margin-top: 10px;
+    line-height: 24px;
+    h1 {
+      font-size: 18px;
+    }
+    p {
+      font-size: 16px;
+    }
+  }
 }
 @media (max-width:768px) {
   .containter {
     display: none;
+  }
+  .me {
+    text-align: center;
+    .content-user {
+      height: 32px;
+      width: 32px;
+      margin: auto;
+      .user {
+        border: 1px solid rgba(0, 0, 0, .4);
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        margin: auto;
+      }
+    }
   }
 }
 </style>

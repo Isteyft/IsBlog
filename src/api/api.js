@@ -33,6 +33,14 @@ export const GetBokeAPI = (params) => {
     params
   })
 }
+//获取博客tag
+export const GetBokeByTagAPI = (params) => {
+  return http({
+    url: '/v1/boke/bokestag',
+    method: 'GET',
+    params
+  })
+}
 //根据id获取
 export const GetBokeIdAPI = (id) => {
   return http({

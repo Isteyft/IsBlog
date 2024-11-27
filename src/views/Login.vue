@@ -30,9 +30,13 @@ const handleLogin = async () => {
   const res = await loginAPI(user)
   store.userInfo = {
     username: user.username,
-    token: res.data
+    token: res.data.data1
   }
-  router.push('/admin')
+  if (res.data.data2 === 'admin') {
+    router.push('/admin')
+  } else {
+    router.push('/home')
+  }
 }
 </script>
 

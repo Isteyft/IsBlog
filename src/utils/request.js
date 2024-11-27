@@ -12,6 +12,7 @@ import { useUserStore } from '@/stores/user'
 const NETWORK_ERROR = '网络错误......'
 // 创建axios实例
 const http = axios.create({
+  // baseURL: 'https://isteyft.top:8888',
   baseURL: 'https://isteyft.top:8888',
   timeout: 5000
 })

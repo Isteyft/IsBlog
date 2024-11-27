@@ -20,6 +20,10 @@ const tableLabel = reactive([
     prop: "labels",
     label: "标签",
   },
+	{
+    prop: "tag",
+    label: "标签",
+  },
   {
     prop: "renderWallpaper",
     label: "图片",
@@ -96,8 +100,8 @@ const bokeContent = reactive({
   labels: ''
 })
 const rules = reactive({
-  labels: [{ required: true, message: "标签是必填项", trigger: "blur" }],
-
+  labels: [{ required: true, message: "标题是必填项", trigger: "blur" }],
+  tag: [{ required: true, message: "标签是选填项", trigger: "blur" }],
 })
 const handleClose = () => {
   dialogVisible.value = false
@@ -215,7 +219,7 @@ onMounted(()=>{
     <el-pagination class="paper" :default-page-size="queryObj.pageSize" layout="prev,pager,next" size="small" :total="queryObj.total" @current-change="handleChange1"/>
     <el-dialog
     v-model="dialogVisible"
-    :title="action == 'add' ? '新增博客' : '编辑博客'"
+    :title="action == 'add' ? '新增图片' : '编辑图片'"
     width="90%"
     :before-close="handleClose">
        <!--需要注意的是设置了:inline="true"，
@@ -223,9 +227,14 @@ onMounted(()=>{
         在css进行处理-->
     <el-form :inline="true"  :model="bokeContent" :rules="rules" ref="contentBoke">
       <el-row>
-        <el-col :span="24">
-          <el-form-item label="图片标签" prop="labels">
-            <el-input v-model="bokeContent.labels" placeholder="请输入标签" />
+        <el-col :span="12">
+          <el-form-item label="图片标题" prop="labels">
+            <el-input v-model="bokeContent.labels" placeholder="请输入标题" />
+          </el-form-item>
+        </el-col>
+       <el-col :span="8">
+          <el-form-item label="图片标签" prop="tag">
+            <el-input v-model="bokeContent.tag" placeholder="请输入标签" />
           </el-form-item>
         </el-col>
       </el-row>

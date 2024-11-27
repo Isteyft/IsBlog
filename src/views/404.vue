@@ -16,14 +16,19 @@ const getImageUrl = (img) => {
 const goHome=()=>{
   //go方法：按指定方向访问历史。如果是正数则是路由记录向前跳转，如果是负数则是向后回退
   //这里我们回退两个页面到跳转前的页面
-  router.go(-2)
+  router.go(-1)
 }
 
 </script>
 
 <style lang="less">
+body {
+  background-image: url("@/assets/Images/404.png");
+  background-size: cover;
+}
 .exception {
 position: relative;
+width: 100%;
 img {
   width: 100%;
   height: 100vh;

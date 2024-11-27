@@ -16,10 +16,22 @@ import { RouterView } from 'vue-router'
 
 <style>
 #app {
+  background-image: var(--background-img);
+  background-size: cover;
+  background-attachment: scroll;
   transition-duration: 1000ms;
   background-color: var(--el-content-bg-color);
   width: 100%;
   overflow: auto;
   height: 100%;
 }
+.serach .el-input__wrapper {
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+}
+.serach .el-input-group__append {
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+}
 </style>
+

@@ -25,6 +25,10 @@ const tableLabel = reactive([
     label: "标题",
   },
   {
+    prop: "tag",
+    label: "标签",
+  },
+  {
     prop: "loadTime",
     label: "上传时间",
   },
@@ -93,12 +97,14 @@ const dialogVisible = ref(false)
 const bokeContent = reactive({
   title: '',
   imgurl: '',
+  tag: '',
   top: 'false',
   txt: ''
 })
 const rules = reactive({
   title: [{ required: true, message: "标题是必填项", trigger: "blur" }],
   imgurl: [{ required: false, message: "文章封面是选填项", trigger: "blur" }],
+  tag: [{ required: true, message: "标签是选填项", trigger: "blur" }],
   top: [{ required: true, message: "是否置顶是必选项", trigger: "change" }],
   txt: [{ required: true, message: '内容是必填项' }]
 })
@@ -241,6 +247,11 @@ onMounted(()=>{
               <el-option label="是" value="true" />
               <el-option label="否" value="false" />
             </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="文章标签" prop="tag">
+            <el-input v-model="bokeContent.tag" placeholder="请输入标签" />
           </el-form-item>
         </el-col>
       </el-row>

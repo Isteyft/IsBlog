@@ -1,16 +1,7 @@
-<!--
- * @Author: Isteyft 14056025+isteyft@user.noreply.gitee.com
- * @Date: 2024-10-01 01:20:08
- * @LastEditors: Isteyft 14056025+isteyft@user.noreply.gitee.com
- * @LastEditTime: 2024-10-04 14:04:34
- * @FilePath: \Isteyft-Boke\src\views\Home.vue
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
--->
 <script setup>
 import '@/assets/less/boke.css'
 import { ref,onMounted,reactive,shallowRef,onBeforeUnmount,getCurrentInstance } from "vue"
 import { UploadPlAPI,GetBokePlAPI,GetBokeIdAPI } from "@/api/api";
-import { useRouter,useRoute } from "vue-router";
 import '@wangeditor/editor/dist/css/style.css';
 import { ElMessage } from 'element-plus';
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
@@ -24,10 +15,8 @@ import "prismjs/plugins/toolbar/prism-toolbar.js"//行号插件的样式
 import "prismjs/plugins/show-language/prism-show-language.js"//行号插件的样式
 import "prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.js"//行号插件的样式
 const store = useUserStore()
-const router = useRouter()
-const route = useRoute()
 const loading = ref(true)
-const id = route.params.id
+const id = 1
 const formatTime = (isoString) => {
     const date = new Date(isoString);
     const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
@@ -50,9 +39,6 @@ const getBokeData = async () => {
   loading.value = false
 }
 const Back = ref('Back')
-const GoBack = () => {
-  router.go(-1)
-}
 const dialogVisible = ref(false)
 const handleClose = () => {
   dialogVisible.value = false
@@ -142,114 +128,114 @@ onMounted(async ()=>{
 </script>
 
 <template>
-  <div class="main">
-    <div class="serach">
-      <el-button class="goback" @click="GoBack()">
-        <component class="icons" :is="Back"></component>
-        返回上一个界面
-      </el-button>
-    </div>
-    <el-scrollbar class="containter">
-      <el-skeleton :loading="loading" animated :throttle="500">
-        <template #template>
-          <div class="boke">
-            <el-skeleton-item variant="h2" style="width: 20%;margin-left:40%;text-align: center;"/><br/>
-            <el-skeleton-item variant="h3" style="width: 20%;margin-left:40%;margin-top:10px;text-align: center;" /><br/>
-            <el-skeleton-item variant="span" style="width: 200px;" />
-            <el-skeleton-item variant="span" style="width: 400px;" />
-            <el-skeleton-item variant="span" style="width: 300px;" />
-            <el-skeleton-item variant="span" style="width: 200px;" />
-            <el-skeleton-item variant="span" style="width: 400px;" />
-            <el-skeleton-item variant="span" style="width: 300px;" />
+  <div class="guanyu">
+    <MyDec />
+    <div class="guanyu-container">
+      <el-scrollbar class="containter">
+        <el-skeleton :loading="loading" animated :throttle="500">
+          <template #template>
+            <div class="boke">
+              <el-skeleton-item variant="h2" style="width: 20%;margin-left:40%;text-align: center;"/><br/>
+              <el-skeleton-item variant="h3" style="width: 20%;margin-left:40%;margin-top:10px;text-align: center;" /><br/>
+              <el-skeleton-item variant="span" style="width: 200px;" />
+              <el-skeleton-item variant="span" style="width: 400px;" />
+              <el-skeleton-item variant="span" style="width: 300px;" />
+              <el-skeleton-item variant="span" style="width: 200px;" />
+              <el-skeleton-item variant="span" style="width: 400px;" />
+              <el-skeleton-item variant="span" style="width: 300px;" />
+            </div>
+          </template>
+          <template #default>
+            <div class="boke">
+              <h2>{{bokeData.title ? bokeData.title : ''}}</h2>
+              <h3 class="time">{{bokeData.loadTime ? bokeData.loadTime : ''}}</h3>
+              <h3 class="visit"><el-icon><View /></el-icon>{{bokeData.visit}}</h3>
+              <div class="content editor-content-view line-numbers" data-plugin-header="show-language" data-prismjs-copy="复制" data-prismjs-copy-success="复制成功" data-prismjs-copy-error="复制失败" data-prismjs-copy-timeout="超时" v-html="bokeData.txt"></div>
+            </div>
+          </template>
+        </el-skeleton>
+        <div class="pl">
+          <h2 class="title">评论区域：</h2>
+          <el-button class="plbuttom primary" @click="handleAdd()">
+            <component class="icons" :is="Back"></component>
+            评论
+          </el-button>
+          <div clss="pls">
+            <el-skeleton :loading="loading" animated :throttle="500" :count="3">
+              <template #template>
+                <div class="pinlun">
+                  <div>
+                    <el-skeleton-item variant="image" style="width:36px;height:36px;border-radius: 50%;" />          
+                  </div>
+                  <div class="text">
+                    <el-skeleton-item variant="h2" style="width: 50px;height:12px;"/><br/>
+                    <el-skeleton-item variant="span" style="width: 70px;height:8px;" /><br/>
+                    <el-skeleton-item variant="span" style="width: 200px;" />
+                  </div>
+                </div>
+              </template>
+              <template #default>
+                <div class="pinlun" v-for="item in pinlunData" :key="item.plid">
+                  <div>          
+                    <el-image class="img" src="https://isteyft.top:3000/ServerImage/assets/user.png" />
+                  </div>
+                  <div class="text">
+                    <h2>{{item.username}}</h2>
+                    <span>{{item.uploadTime}}</span>
+                    <div class="content editor-content-view" v-html="item.txt"></div>
+                  </div>
+                </div>
+              </template>
+            </el-skeleton>
           </div>
-        </template>
-        <template #default>
-          <div class="boke">
-            <h2>{{bokeData.title ? bokeData.title : ''}}</h2>
-            <h3 class="time">{{bokeData.loadTime ? bokeData.loadTime : ''}}</h3>
-            <h3 class="visit"><el-icon><View /></el-icon>{{bokeData.visit}}</h3>
-            <div class="content editor-content-view line-numbers" data-plugin-header="show-language" data-prismjs-copy="复制" data-prismjs-copy-success="复制成功" data-prismjs-copy-error="复制失败" data-prismjs-copy-timeout="超时" v-html="bokeData.txt"></div>
-          </div>
-        </template>
-      </el-skeleton>
-      <div class="pl">
-        <h2>评论区域：</h2>
-        <el-button class="plbuttom primary" @click="handleAdd()">
-          <component class="icons" :is="Back"></component>
-          评论
-        </el-button>
-        <div clss="pls">
-          <el-skeleton :loading="loading" animated :throttle="500" :count="3">
-            <template #template>
-              <div class="pinlun">
-                <div>
-                  <el-skeleton-item variant="image" style="width:36px;height:36px;border-radius: 50%;" />          
-                </div>
-                <div class="text">
-                  <el-skeleton-item variant="h2" style="width: 50px;height:12px;"/><br/>
-                  <el-skeleton-item variant="span" style="width: 70px;height:8px;" /><br/>
-                  <el-skeleton-item variant="span" style="width: 200px;" />
-                </div>
-              </div>
-            </template>
-            <template #default>
-              <div class="pinlun" v-for="item in pinlunData" :key="item.plid">
-                <div>          
-                  <el-image class="img" src="https://isteyft.top:3000/ServerImage/assets/user.png" />
-                </div>
-                <div class="text">
-                  <h2>{{item.username}}</h2>
-                  <span>{{item.uploadTime}}</span>
-                  <div class="content editor-content-view" v-html="item.txt"></div>
-                </div>
-              </div>
-            </template>
-          </el-skeleton>
         </div>
-      </div>
-    </el-scrollbar>
-    <el-dialog
-    v-model="dialogVisible"
-    title="新增评论"
-    width="90%"
-    :before-close="handleClose">
-       <!--需要注意的是设置了:inline="true"，
-        会对el-select的样式造成影响，我们通过给他设置一个class=select-clearn
-        在css进行处理-->
-    <el-form :inline="true"  :model="bokeContent" :rules="rules" ref="contentBoke">
-      <el-col :span="12">
-        <el-form-item label="留言名称" prop="username">
-          <el-input v-model="bokeContent.username" placeholder="请输入留言名称" />
-        </el-form-item>
-      </el-col>
-      <el-row>
-        <el-col :span="24">
-        <Toolbar
-        :editor="editorRef"
-        :defaultConfig="toolbarConfig"
-        :mode="mode"
-        style="border-bottom: 1px solid #ccc"
-      />
-      <Editor
-        :defaultConfig="editorConfig"
-        :mode="mode"
-        v-model="bokeContent.txt"
-        style="height: 400px;"
-        @onCreated="handleCreated"/>
+      </el-scrollbar>
+      <el-dialog
+      v-model="dialogVisible"
+      title="新增评论"
+      width="90%"
+      :before-close="handleClose">
+         <!--需要注意的是设置了:inline="true"，
+          会对el-select的样式造成影响，我们通过给他设置一个class=select-clearn
+          在css进行处理-->
+      <el-form :inline="true"  :model="bokeContent" :rules="rules" ref="contentBoke">
+        <el-col :span="12">
+          <el-form-item label="留言名称" prop="username">
+            <el-input v-model="bokeContent.username" placeholder="请输入留言名称" />
+          </el-form-item>
         </el-col>
-      </el-row>
-      <el-row style="justify-content: flex-end">
-        <el-form-item>
-          <el-button type="primary" @click="handleCancel">取消</el-button>
-          <el-button type="primary" @click="onSubmit">确定</el-button>
-        </el-form-item>
-      </el-row>
-    </el-form>
-  </el-dialog>
+        <el-row>
+          <el-col :span="24">
+          <Toolbar
+          :editor="editorRef"
+          :defaultConfig="toolbarConfig"
+          :mode="mode"
+          style="border-bottom: 1px solid #ccc"
+        />
+        <Editor
+          :defaultConfig="editorConfig"
+          :mode="mode"
+          v-model="bokeContent.txt"
+          style="height: 400px;"
+          @onCreated="handleCreated"/>
+          </el-col>
+        </el-row>
+        <el-row style="justify-content: flex-end">
+          <el-form-item>
+            <el-button type="primary" @click="handleCancel">取消</el-button>
+            <el-button type="primary" @click="onSubmit">确定</el-button>
+          </el-form-item>
+        </el-row>
+      </el-form>
+    </el-dialog>
+    </div>
   </div>
 </template>
 
 <style scoped lang="less">
+.guanyu {
+  display: flex;
+}
 img,video {
   max-width: 90%;
 }
@@ -257,13 +243,14 @@ img,video {
   height: 2vh;
   width: 2vw;
 }
-.main {
+.guanyu-container {
+  min-width: 568px;
+  width: 75%;
   transition-duration: 1000ms;
   padding: 20px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  //height: 500px;
   background: var(--el-bg-color);
   gap: 10px;
   img,video {
@@ -302,8 +289,10 @@ img,video {
   margin-top: 15px;
   padding: 5px;
   border-top: 3px solid #f0f0f2;
-  h2 {
-    font-size: 1em;
+  .title {
+    text-align: center;
+    font-weight: 500;
+    font-size: 1.5em;
     font-weight: 500;
   }
 }
@@ -325,6 +314,10 @@ img,video {
     width: 36px;
     height: 36px;
   }
+  h2 {
+    font-size: 1em;
+    font-weight: 500;
+  }
   span {
     font-size: 0.4em;
     color: #555666;
@@ -337,16 +330,18 @@ img,video {
   width: 100%;
 }
 @media (max-width:768px) {
-  .main {
+  .guanyu-container {
     width: 100%;
-    //height: 100%;
-    margin-bottom: 50px;
-    background-color: var(--el-content-bg-color);
+    max-width: 768px;
+    min-width: 368px;
+    background-color: var(--el-content-phone-bg-color);
   }
   .pl {
+    background-color: var(--el-content-phone-bg-color);
     border-top: 2px solid #d4caca;
   }
   .pinlun {
+    background-color: var(--el-boke-phone-bg-color);
     margin: 0 auto;
     width: 100%;
     display: flex;
