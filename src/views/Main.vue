@@ -204,7 +204,7 @@ onBeforeUnmount(() => {
     }
   }
 }
-.headmenu {
+.openmenu,.menu,.menu-close {
   display: none;
 }
 .containers {
@@ -240,6 +240,7 @@ onBeforeUnmount(() => {
     }
   }
   .menu-close {
+    display: block;
     z-index: 14;
     right: -100%;
     position: fixed;
