@@ -7,7 +7,7 @@
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <script setup>
-import {ref,reactive} from 'vue'
+import {ref,reactive,onMounted,onBeforeUnmount} from 'vue'
 import { useThemeStore } from '@/stores/dark'
 import { Search } from '@element-plus/icons-vue'
 import { useRouter } from "vue-router";
@@ -38,6 +38,24 @@ const isMenuOpen = ref(false);
 const handleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
 }
+// 关闭菜单的方法
+const closeMenu = () => {
+  isMenuOpen.value = false;
+};
+// 监听 Esc 键来关闭菜单
+const escKeyHandler = (event) => {
+  if (event.key === 'Escape') {
+    closeMenu();
+  }
+};
+// 添加事件监听器
+onMounted(() => {
+  window.addEventListener('keydown', escKeyHandler);
+});
+// 移除事件监听器
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', escKeyHandler);
+});
 </script>
 
 <template>
@@ -70,8 +88,10 @@ const handleMenu = () => {
           </ul>
         </div>
       </el-header>
-      <div class="headmenu" @click="handleMenu()">
-        <component class="icons" :is="Operation"></component>
+      <div class="openmenu">
+        <component class="icons" :is="Operation"  @click="handleMenu()"></component>
+      </div>
+      <div class="menu-close" :class="{ active: isMenuOpen }"  @click="closeMenu()"></div>
         <div class="menu" :class="{ active: isMenuOpen }">
           <div class="me mycard">
             <div class="userIcon">
@@ -133,7 +153,6 @@ const handleMenu = () => {
               </div>
             </li>
           </ul>
-        </div>
       </div>
     <el-container class="containers">
       <el-container class="">
@@ -209,7 +228,7 @@ const handleMenu = () => {
     display: none;
     width: 100%;
   }
-  .headmenu {
+  .openmenu {
     height: 32px;
     width: 32px;
     right: 0px;
@@ -220,13 +239,21 @@ const handleMenu = () => {
       width: 32px;
     }
   }
+  .menu-close {
+    z-index: 14;
+    right: -100%;
+    position: fixed;
+    width: 100%;
+    height:100%;
+  }
   .menu {
+    z-index: 15;
+    right: -100%; /* 初始位置在屏幕右侧外 */
     display: block;
     position: fixed;
     top: 0;
-    right: -100%; /* 初始位置在屏幕右侧外 */
     width: 60%;
-    height: 100%;
+    height:100%;
     padding: 20px;
     background-color: var(--el-bg-color);
     z-index: 9;
@@ -263,9 +290,10 @@ const handleMenu = () => {
       display: flex;
       flex-wrap: wrap;
       li {
+        width: 33%;
         background: var(--el-content-color);
         padding: 5px;
-        font-size: 28px;
+        font-size: 32px;
         text-align: center;
         color: var(--el-box-color);
         border: 1px solid var(--el-border-colors);
@@ -283,6 +311,7 @@ const handleMenu = () => {
   }
   .active {
     right: 0;
+    z-index: 15;
   }
   .containers {
     margin: auto;
