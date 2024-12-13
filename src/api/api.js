@@ -95,10 +95,25 @@ export const GetPlAPI = (params) => {
     params
   })
 }
+export const GetCPlAPI = (params) => {
+  return http({
+    url: '/v2/boke/cpls',
+    method: 'GET',
+    params
+  })
+}
 //上传评论
 export const UploadPlAPI = (formData) => {
   return http({
     url: '/v1/boke/uploadpl',
+    method: 'POST',
+    data: formData
+  })
+}
+//上传子评论
+export const UploadCPlAPI = (formData) => {
+  return http({
+    url: '/v1/boke/uploadcpl',
     method: 'POST',
     data: formData
   })
@@ -111,6 +126,13 @@ export const UpdatePlAPI = (formData) => {
     data: formData
   })
 }
+export const UpdateCPlAPI = (formData) => {
+  return http({
+    url: '/v2/boke/updatecpl',
+    method: 'PUT',
+    data: formData
+  })
+}
 //删除评论
 export const DelPlAPI = (delId) => {
   return http({
@@ -118,6 +140,15 @@ export const DelPlAPI = (delId) => {
     method: 'DELETE',
     params: {
       plid: delId
+    }
+  })
+}
+export const DelCPlAPI = (delId) => {
+  return http({
+    url: '/v2/boke/sccpl',
+    method: 'DELETE',
+    params: {
+      cplid: delId
     }
   })
 }

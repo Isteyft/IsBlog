@@ -66,7 +66,7 @@ onMounted(()=>{
     <el-skeleton :loading="loading" animated :throttle="500">
       <template #template>
       <div class="top">
-        <el-skeleton-item variant="h1" style="width: 50px;height: 50px;" />
+        <el-skeleton-item variant="h1" style="width: 100px;height: 50px;margin:10px auto;margin-left: 40%;" />
         <article class="boke">
           <div class="topicon">
             <component class="icons" :is="CaretTop"></component>
@@ -79,11 +79,12 @@ onMounted(()=>{
               <el-skeleton-item variant="span" style="margin-top: 10px;width: 100px" />
             </div>
             <div>          
-              <el-skeleton-item variant="image" style="width:120px;height:120px;" />
+              <el-skeleton-item variant="image" style="width:120px;height:120px; margin: 10px;" />
             </div>
           </div>
         </article>
       </div>
+      <el-skeleton-item variant="h1" style="width: 100px;height: 50px;margin:10px auto;margin-left: 40%;" />
     </template>
     <template #default>
       <div class="top">
@@ -110,20 +111,21 @@ onMounted(()=>{
     <el-skeleton :loading="loading" animated :throttle="500" :count="3">
       <template #template>
         <div class="bokes">
-          <el-skeleton-item variant="h1" style="width: 50px;height: 50px;" />
-        <article class="boke">
-          <div class="content">
-            <div class="text">
-              <el-skeleton-item variant="h2" style="width: 50px" />
-              <el-skeleton-item variant="span" style="margin-top: 10px;width: 60px" />
-              <el-skeleton-item variant="span" style="margin-top: 10px;width: 40px" />
-              <el-skeleton-item variant="span" style="margin-top: 10px;width: 100px" />
+          <article class="boke" style="margin: 10px">
+            <div class="topicon">
             </div>
-            <div>          
-              <el-skeleton-item variant="image" style="width:120px;height:120px;" />
+            <div class="content">
+              <div class="text">
+                <el-skeleton-item variant="h2" style="width: 50px" />
+                <el-skeleton-item variant="span" style="margin-top: 10px;width: 60px" />
+                <el-skeleton-item variant="span" style="margin-top: 10px;width: 40px" />
+                <el-skeleton-item variant="span" style="margin-top: 10px;width: 100px" />
+              </div>
+              <div>          
+                <el-skeleton-item variant="image" style="width:120px;height:120px; margin: 10px;" />
+              </div>
             </div>
-          </div>
-        </article>
+          </article>
       </div>
       </template>
       <template #default>

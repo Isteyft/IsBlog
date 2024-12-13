@@ -4,19 +4,16 @@ import '@wangeditor/editor/dist/css/style.css';
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 // import { useRoute } from 'vue-router'
 import { ElMessage,ElMessageBox } from 'element-plus';
-import { GetPlAPI,DelPlAPI,UpdatePlAPI } from "@/api/api";
-import { useRouter } from "vue-router";
+import { GetCPlAPI,DelCPlAPI,UpdateCPlAPI } from "@/api/api";
+import { useRouter,useRoute } from "vue-router";
 const router = useRouter()
+const route = useRoute()
 const tableData = ref([])
+const id = route.params.id
 const tableLabel = reactive([
   {
-    prop: "bokeId",
-    label: "ID编号",
-    width: "200px",
-  },
-  {
-    prop: "plid",
-    label: "评论编号",
+    prop: "cplid",
+    label: "子评论编号",
   },
   {
     prop: "txt",
@@ -30,12 +27,16 @@ const tableLabel = reactive([
     prop: "username",
     label: "评论名",
   },
+  {
+    prop: "replyTo",
+    label: "回复自",
+  },
 ])
 const queryObj = {
-  username: '',
   pageNum: 1, 
   pageSize: 6,
   ss: '',
+  plid: '',
   total: 0
 }
 const formatTime = (isoString) => {
@@ -44,8 +45,9 @@ const formatTime = (isoString) => {
     return date.toLocaleString('default', options);
 }
 const getPlData = async () => {
+  queryObj.plid = id
   // console.log(config)
-  const data = await GetPlAPI(queryObj)
+  const data = await GetCPlAPI(queryObj)
   // console.log(data)
   if (data.code === 401) {
     router.push('/login')
@@ -72,7 +74,7 @@ const handleChange1 = (page) => {
 //删除
 const handleDelete = (val) => {
   ElMessageBox.confirm("你确认要删除吗").then(async ()=>{
-    await DelPlAPI(val.plid)
+    await DelCPlAPI(val.cplid)
     ElMessage({
       showClose:true,
       message:'删除成功',
@@ -111,7 +113,7 @@ const onSubmit = () => {
     if (vaild) {
       let res = null;
       if(action.value == "edit"){
-        res = await UpdatePlAPI(bokeContent)
+        res = await UpdateCPlAPI(bokeContent)
       }
       if (res) {
         dialogVisible.value = false
@@ -187,7 +189,6 @@ onMounted(()=>{
       <el-table-column v-for="item in tableLabel" :key='item.bokeId' :label="item.label" :prop="item.prop"/>
       <el-table-column fixed="right" label="操作" min-width="120">
         <template #default="scope">
-          <el-button type="primary" size="small" @click="handleMenu(scope.row)">管理子评论</el-button>
           <el-button type="primary" size="small" @click="handleEdit(scope.row)">
             编辑
           </el-button>

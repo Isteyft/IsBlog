@@ -249,6 +249,8 @@ onMounted(()=>{
             </el-select>
           </el-form-item>
         </el-col>
+      </el-row>
+      <el-row>
         <el-col :span="6">
           <el-form-item label="文章标签" prop="tag">
             <el-input v-model="bokeContent.tag" placeholder="请输入标签" />

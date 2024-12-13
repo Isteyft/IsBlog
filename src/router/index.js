@@ -75,6 +75,11 @@ const router = createRouter({
           component: () => import('@/views/Glpl.vue'),
         },
         {
+          path: '/glcpl/:id',
+          name: 'admincPl',
+          component: () => import('@/views/Glcpl.vue'),
+        },
+        {
           path: '/glimage',
           name: 'adminImage',
           component: () => import('@/views/GlImage.vue'),

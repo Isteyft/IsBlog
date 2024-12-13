@@ -9,7 +9,7 @@
 <script setup>
 import '@/assets/less/boke.css'
 import { ref,onMounted,reactive,shallowRef,onBeforeUnmount,getCurrentInstance } from "vue"
-import { UploadPlAPI,GetBokePlAPI,GetBokeIdAPI } from "@/api/api";
+import { UploadPlAPI,GetBokePlAPI,GetBokeIdAPI,UploadCPlAPI } from "@/api/api";
 import { useRouter,useRoute } from "vue-router";
 import '@wangeditor/editor/dist/css/style.css';
 import { ElMessage } from 'element-plus';
@@ -46,6 +46,9 @@ const getBokeData = async () => {
   bokeData.value.loadTime = formatTime(bokeData.value.loadTime)
   pinlunData.value.forEach(item => {
       item.uploadTime = formatTime(item.uploadTime);
+      item.cpls.forEach(item => {
+        item.uploadTime = formatTime(item.uploadTime);
+      });
   });
   loading.value = false
 }
@@ -60,8 +63,19 @@ const handleClose = () => {
 const handleCancel = () => {
   dialogVisible.value = false
 }
+const action = ref('add')
 const handleAdd = () => {
+  action.value = 'add'
+  bokeContent.plid = ''
   dialogVisible.value = true
+}
+const RealyUsername = ref('')
+const handleReply = (plid, uname) => {
+  action.value = 'reply'
+  bokeContent.plid = plid
+  dialogVisible.value = true
+  RealyUsername.value = uname
+  
 }
 const { proxy } = getCurrentInstance(); // 获取当前组件实例的代理
 const onSubmit = () => {
@@ -78,7 +92,13 @@ const onSubmit = () => {
       bokeContent.username = store.userInfo.username ? store.userInfo.username : '游客'
       bokeContent.bokeId = id
       let res = null;
-      res = await UploadPlAPI(bokeContent)
+      if (action.value === 'add') {
+        res = await UploadPlAPI(bokeContent)
+      }
+      else if (action.value === 'reply') {
+        bokeContent.replyTo = RealyUsername.value
+        res = await UploadCPlAPI(bokeContent)
+      }
       if (res) {
         dialogVisible.value = false
         proxy.$refs['contentBoke'].resetFields()
@@ -154,13 +174,13 @@ onMounted(async ()=>{
         <template #template>
           <div class="boke">
             <el-skeleton-item variant="h2" style="width: 20%;margin-left:40%;text-align: center;"/><br/>
-            <el-skeleton-item variant="h3" style="width: 20%;margin-left:40%;margin-top:10px;text-align: center;" /><br/>
-            <el-skeleton-item variant="span" style="width: 200px;" />
-            <el-skeleton-item variant="span" style="width: 400px;" />
-            <el-skeleton-item variant="span" style="width: 300px;" />
-            <el-skeleton-item variant="span" style="width: 200px;" />
-            <el-skeleton-item variant="span" style="width: 400px;" />
-            <el-skeleton-item variant="span" style="width: 300px;" />
+            <el-skeleton-item variant="h3" style="width: 30%;margin-left:40%;margin-top:10px;text-align: center;" /><br/>
+            <el-skeleton-item variant="p" style="width: 200px;" />
+            <el-skeleton-item variant="p" style="width: 400px;" />
+            <el-skeleton-item variant="p" style="width: 300px;" />
+            <el-skeleton-item variant="p" style="width: 200px;" />
+            <el-skeleton-item variant="p" style="width: 400px;" />
+            <el-skeleton-item variant="p" style="width: 300px;" />
           </div>
         </template>
         <template #default>
@@ -186,22 +206,36 @@ onMounted(async ()=>{
                   <el-skeleton-item variant="image" style="width:36px;height:36px;border-radius: 50%;" />          
                 </div>
                 <div class="text">
-                  <el-skeleton-item variant="h2" style="width: 50px;height:12px;"/><br/>
-                  <el-skeleton-item variant="span" style="width: 70px;height:8px;" /><br/>
-                  <el-skeleton-item variant="span" style="width: 200px;" />
+                  <el-skeleton-item variant="h2" style="width: 75px;height:12px;"/><br/>
+                  <el-skeleton-item variant="p" style="width: 100px;height:8px;" /><br/>
+                  <el-skeleton-item variant="p" style="width: 250px;" />
                 </div>
               </div>
             </template>
             <template #default>
-              <div class="pinlun" v-for="item in pinlunData" :key="item.plid">
-                <div>          
-                  <el-image class="img" src="https://isteyft.top:3000/ServerImage/assets/user.png" />
+              <div class="plnluns" v-for="item in pinlunData" :key="item.plid">
+                <div class="pinlun">
+                  <div>          
+                    <el-image class="img" src="https://isteyft.top:3000/ServerImage/assets/user.png" />
+                  </div>
+                  <div class="text">
+                    <h2>{{item.username}}</h2>
+                    <span>{{item.uploadTime}}&nbsp;&nbsp;&nbsp;<span @click="handleReply(item.plid)" class="cursor">回复</span></span>
+                    <div class="content editor-content-view" v-html="item.txt"></div>
+                  </div>
                 </div>
-                <div class="text">
-                  <h2>{{item.username}}</h2>
-                  <span>{{item.uploadTime}}</span>
-                  <div class="content editor-content-view" v-html="item.txt"></div>
-                </div>
+                <ul v-if="item.cpls">
+                  <li v-for="i in item.cpls" :key="i.cplid" class="pinlun cpl">
+                    <div>          
+                      <el-image class="img" src="https://isteyft.top:3000/ServerImage/assets/user.png" />
+                    </div>
+                    <div class="text">
+                      <h2>{{i.username}} <span v-if="i.replyTo"><span>回复</span> {{i.replyTo}}</span></h2>
+                      <span>{{i.uploadTime}}&nbsp;&nbsp;&nbsp;<span @click="handleReply(item.plid,i.username)" class="cursor">回复</span></span>
+                      <div class="content editor-content-view" v-html="i.txt"></div>
+                    </div>
+                  </li>
+                </ul>
               </div>
             </template>
           </el-skeleton>
@@ -210,18 +244,20 @@ onMounted(async ()=>{
     </el-scrollbar>
     <el-dialog
     v-model="dialogVisible"
-    title="新增评论"
+    :title="action == 'add' ? '新增评论' : `回复${RealyUsername || ''}`"
     width="90%"
     :before-close="handleClose">
        <!--需要注意的是设置了:inline="true"，
         会对el-select的样式造成影响，我们通过给他设置一个class=select-clearn
         在css进行处理-->
     <el-form :inline="true"  :model="bokeContent" :rules="rules" ref="contentBoke">
-      <el-col :span="12">
-        <el-form-item label="留言名称" prop="username">
-          <el-input v-model="bokeContent.username" placeholder="请输入留言名称" />
-        </el-form-item>
-      </el-col>
+      <el-row>
+        <el-col :span="24">
+          <el-form-item label="留言名称" prop="username">
+            <el-input v-model="bokeContent.username" placeholder="请输入留言名称" />
+          </el-form-item>
+        </el-col>
+      </el-row>
       <el-row>
         <el-col :span="24">
         <Toolbar
@@ -252,6 +288,9 @@ onMounted(async ()=>{
 <style scoped lang="less">
 img,video {
   max-width: 90%;
+}
+.cursor {
+  cursor: pointer;
 }
 .icons {
   height: 2vh;
@@ -314,10 +353,10 @@ img,video {
 .pinlun {
   margin: 0 auto;
   width: 80%;
-  display: flex;
-  padding: 10px;
   background: var(--el-bg-color);
   border-bottom: 1px solid #f0f0f2;
+  display: flex;
+  padding: 10px;
   gap: 10px;
   margin-bottom: 10px;
   .img {
@@ -329,6 +368,9 @@ img,video {
     font-size: 0.4em;
     color: #555666;
   }
+}
+.cpl {
+  padding-left: 30px;
 }
 
 .edit {
@@ -351,6 +393,9 @@ img,video {
     width: 100%;
     display: flex;
     padding: 10px;
+  }
+  .cpl {
+    padding-left: 30px;
   }
 }
 </style>

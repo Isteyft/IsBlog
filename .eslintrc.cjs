@@ -11,5 +11,7 @@ module.exports = {
   rules: {
     "vue/multi-word-component-names": "off",
     "vue/comment-directive": 'off',
+    // 关闭分号规则
+    "semi": true
  },
 }
