@@ -9,6 +9,7 @@
 <script setup>
 import {ref,computed,onMounted} from 'vue'
 import {adminStore} from '@/stores/admin'
+import { useThemeStore } from '@/stores/dark'
 import {useRouter} from 'vue-router'
 const getImageUrl = (user) => {
   return new URL(`../assets/images/${user}.jpg`,import.meta.url).href
@@ -21,6 +22,16 @@ const router = useRouter()
 const handleLoginOut = () => {
   store.clearUserInfo()
   router.push('/login')
+}
+const ThemeIcon = ref('Sunny')
+const themeStore = useThemeStore()
+const handleDark = () => {
+  if (ThemeIcon.value === "Sunny") {
+    ThemeIcon.value = "Moon"
+  } else {
+    ThemeIcon.value = "Sunny"
+  }
+  themeStore.toggleTheme()
 }
 const GoHome = () => {
   router.push('/home')
@@ -41,6 +52,9 @@ onMounted(()=>{
       <el-breadcrumb separator="/" class="bread">
         <el-breadcrumb-item v-if="current" :to="{ path: current.path }">{{current.label}}</el-breadcrumb-item>
       </el-breadcrumb>
+      <div class="darkbuttom" @click="handleDark">
+        <component class="icons" :is="ThemeIcon"></component>
+      </div>
     </div>
     <div class="r-content">
       <el-dropdown>
@@ -66,6 +80,13 @@ onMounted(()=>{
   width: 100%;
   height: 100%;
   background-color: #333;
+}
+.darkbuttom {
+  transition-duration: 1000ms;
+  .icons {
+    width: 20px;
+    height: 20px;
+  }
 }
 .icons {
   width: 20px;

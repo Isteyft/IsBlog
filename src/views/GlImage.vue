@@ -7,6 +7,7 @@ import { GetPlAPI,GetImageAPI,DelImageAPI,UpdateImageAPI } from "@/api/api";
 import { genFileId } from 'element-plus'
 import {useUserStore} from '@/stores/user'
 import { useRouter } from "vue-router";
+import { formatTime } from "@/utils/formatTime";
 const router = useRouter()
 const store = useUserStore()
 const tableData = ref([])
@@ -18,7 +19,7 @@ const tableLabel = reactive([
   },
   {
     prop: "labels",
-    label: "标签",
+    label: "标题",
   },
 	{
     prop: "tag",
@@ -44,11 +45,6 @@ const queryObj = {
   pageSize: 3,
   ss: '',
   total: 0
-}
-const formatTime = (isoString) => {
-    const date = new Date(isoString);
-    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
-    return date.toLocaleString('default', options);
 }
 const getImageData = async () => {
   const test = await GetPlAPI(queryObj)
@@ -139,7 +135,6 @@ const handleUploadError = (val) => {
 const onSubmit = () => {
   proxy.$refs['contentBoke'].validate(async (vaild)=>{
     if (vaild) {
-      bokeContent.tag = bokeContent.labels
       bokeContent.username = store.userInfo.username
       upload.value.data = bokeContent.value
        if (action.value === 'add') {

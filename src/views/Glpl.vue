@@ -4,6 +4,7 @@ import '@wangeditor/editor/dist/css/style.css';
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 // import { useRoute } from 'vue-router'
 import { ElMessage,ElMessageBox } from 'element-plus';
+import { formatTime } from "@/utils/formatTime";
 import { GetPlAPI,DelPlAPI,UpdatePlAPI } from "@/api/api";
 import { useRouter } from "vue-router";
 const router = useRouter()
@@ -37,11 +38,6 @@ const queryObj = {
   pageSize: 6,
   ss: '',
   total: 0
-}
-const formatTime = (isoString) => {
-    const date = new Date(isoString);
-    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
-    return date.toLocaleString('default', options);
 }
 const getPlData = async () => {
   // console.log(config)

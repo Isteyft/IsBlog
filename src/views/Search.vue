@@ -10,6 +10,7 @@
 import { ref,onMounted } from "vue"
 import { GetBokeAPI } from "@/api/api";
 import { useRouter, useRoute } from "vue-router";
+import { formatTime } from "@/utils/formatTime";
 const router = useRouter()
 const route = useRoute()
 const loading = ref(true)
@@ -21,11 +22,6 @@ const queryObj = {
   total: 0
 }
 queryObj.ss = route.params.ss
-const formatTime = (isoString) => {
-    const date = new Date(isoString);
-    const options = { year: 'numeric', month: 'long', day: 'numeric'};
-    return date.toLocaleString('default', options);
-}
 const tableData = ref([])
 const getBokeData = async () => {
   

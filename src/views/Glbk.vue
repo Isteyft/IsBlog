@@ -7,6 +7,7 @@ import { ElMessage,ElMessageBox } from 'element-plus';
 import { GetPlAPI,GetBokeAPI,DelBokeAPI,UpdateBokeAPI,UploadBokeAPI } from "@/api/api";
 import {useUserStore} from '@/stores/user'
 import { useRouter } from "vue-router";
+import { formatTime } from "@/utils/formatTime";
 const router = useRouter()
 const store = useUserStore()
 const tableData = ref([])
@@ -43,11 +44,6 @@ const queryObj = {
   pageSize: 6,
   ss: '',
   total: 0
-}
-const formatTime = (isoString) => {
-    const date = new Date(isoString);
-    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
-    return date.toLocaleString('default', options);
 }
 const getBokeData = async () => {
   const test = await GetPlAPI(queryObj)
@@ -296,7 +292,7 @@ onMounted(()=>{
   .paper {
     position: absolute;
     right: 10px;
-    bottom: 30px;
+    background: var(--el-content-bg-color);
   }
   .el-table{
     width: 100%;

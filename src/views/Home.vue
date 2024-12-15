@@ -11,6 +11,7 @@ import { ref,onMounted } from "vue"
 // import { ref,onMounted,reactive } from "vue"
 import { GetBokeAPI, GetTopAPI } from "@/api/api";
 import { useRouter } from "vue-router";
+import { formatTime } from "@/utils/formatTime";
 const router = useRouter()
 const loading = ref(true)
 const queryObj = {
@@ -19,11 +20,6 @@ const queryObj = {
   pageSize: 10,
   ss: '',
   total: 0
-}
-const formatTime = (isoString) => {
-    const date = new Date(isoString);
-    const options = { year: 'numeric', month: 'long', day: 'numeric'};
-    return date.toLocaleString('default', options);
 }
 const tableData = ref([])
 const topData = ref([])

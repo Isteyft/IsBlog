@@ -6,6 +6,7 @@ import '@wangeditor/editor/dist/css/style.css';
 import { ElMessage } from 'element-plus';
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import {useUserStore} from '@/stores/user'
+import { formatTime } from "@/utils/formatTime";
 import Prism from "prismjs"//代码高亮core
 import "prismjs/plugins/line-numbers/prism-line-numbers.min.js"//行号插件
 import "prismjs/themes/prism-tomorrow.min.css"//高亮主题
@@ -17,11 +18,6 @@ import "prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.js"//行号插
 const store = useUserStore()
 const loading = ref(true)
 const id = 1
-const formatTime = (isoString) => {
-    const date = new Date(isoString);
-    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
-    return date.toLocaleString('default', options);
-}
 const bokeData = ref({})
 const pinlunData = ref([])
 const getBokeData = async () => {
