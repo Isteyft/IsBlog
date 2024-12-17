@@ -1,23 +1,13 @@
-/*
- * @Author: Isteyft 14056025+isteyft@user.noreply.gitee.com
- * @Date: 2024-09-21 17:40:19
- * @LastEditors: Isteyft 14056025+isteyft@user.noreply.gitee.com
- * @LastEditTime: 2024-09-24 11:16:34
- * @FilePath: \Isteyft-Boke\vite.config.js
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- */
 import { fileURLToPath, URL } from 'node:url';
 
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
-import babel from '@vitejs/plugin-babel';
-import legacy from '@vitejs/plugin-legacy';
+import babel from 'vite-plugin-babel';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
@@ -28,16 +18,21 @@ export default defineConfig({
     Components({
       resolvers: [ElementPlusResolver()],
     }),
-    babel({
-      presets: ['@babel/preset-env']
-    }),
-    legacy({
-      targets: ['ie >= 11'], // 根据需要指定浏览器版本
-      additionalLegacyPolyfills: ['regenerator-runtime/runtime'],
-    }),
+    babel(),  // 添加 Babel 插件
+    // babel({
+    //   presets: ['@babel/preset-env'],
+    //   plugins: ['@babel/plugin-transform-runtime'], // 添加必要的 Babel 插件
+    // }),
+    // legacy({
+    //   targets: ['ie >= 11'], // 根据需要指定浏览器版本
+    //   additionalLegacyPolyfills: ['regenerator-runtime/runtime'],
+    // }),
   ],
+  // build: {
+  //   target: 'es2015', // 根据实际需求调整这个值，比如设置为"es5"
+  // },
   build: {
-    target: 'es2015', // 根据实际需求调整这个值，比如设置为"es5"
+    target: 'es2015',  // 根据实际需求调整这个值
   },
   resolve: {
     alias: {
@@ -46,11 +41,10 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      // 对以 /api 开头的请求进行代理
       '/v1': {
-        target: 'localhost:8081', // 目标服务器地址
-        changeOrigin: true, // 改变请求的源至目标URL
-        // rewrite: (path) => path.replace(/^\/api/, '') // 重写路径，移除前缀'/api'
+        target: 'http://localhost:8088', // 确保目标地址是完整的 URL
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/v1/, ''), // 重写路径，移除前缀'/v1'
       }
     }
   }
