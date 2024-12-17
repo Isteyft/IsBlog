@@ -8,13 +8,13 @@
 -->
 <script setup>
 import { useRouter } from "vue-router";
-const router = useRouter()
+const router = useRouter();
 const getImageUrl = (user) => {
-  return new URL(`../assets/images/${user}.jpg`,import.meta.url).href
-} 
+  return new URL(`../assets/images/${user}.jpg`,import.meta.url).href;
+};
 const goBack = () => {
-  router.go(-1)
-}
+  router.go(-1);
+};
 </script>
 
 <template>

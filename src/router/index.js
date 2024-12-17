@@ -6,7 +6,7 @@
  * @FilePath: \Isteyft-Boke\src\router\index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router';
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
@@ -108,6 +108,6 @@ const router = createRouter({
   //     top: 0
   //   }
   // }
-})
+});
 
-export default router
+export default router;

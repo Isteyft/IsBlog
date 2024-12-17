@@ -11,7 +11,8 @@ module.exports = {
   rules: {
     "vue/multi-word-component-names": "off",
     "vue/comment-directive": 'off',
-    // 关闭分号规则
-    "semi": true
- },
-}
+    // 强制使用分号
+    "semi": ['error', 'always'] // 使用 2 或 'error' 来表示这是一个错误，并且总是要求分号
+    // "semi": 'off',
+  }
+};

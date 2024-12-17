@@ -6,16 +6,16 @@
  * @FilePath: \Isteyft-Boke\src\utils\request.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
-import axios from 'axios'
-import { ElMessage } from 'element-plus'
-import { useUserStore } from '@/stores/user'
-const NETWORK_ERROR = '网络错误......'
+import axios from 'axios';
+import { ElMessage } from 'element-plus';
+import { useUserStore } from '@/stores/user';
+const NETWORK_ERROR = '网络错误......';
 // 创建axios实例
 const http = axios.create({
   // baseURL: 'https://isteyft.top:8888',
   baseURL: 'https://isteyft.top:8888',
   timeout: 5000
-})
+});
 
 // axios请求拦截器
 http.interceptors.request.use(function (config) {
@@ -24,13 +24,13 @@ http.interceptors.request.use(function (config) {
     config.params = config.data;
     delete config.data;
   }
-  const userStore = useUserStore()
-  const token = userStore.userInfo.token
+  const userStore = useUserStore();
+  const token = userStore.userInfo.token;
   // console.log(token);
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`
+    config.headers.Authorization = `Bearer ${token}`;
   }
-  return config
+  return config;
 }, function (error) {
   // 对请求错误做些什么
   // console.log(error);
@@ -39,9 +39,9 @@ http.interceptors.request.use(function (config) {
 
 // axios响应式拦截器
 http.interceptors.response.use(function (response) {
-  const {code,data,msg} = response.data
+  const {code,data,msg} = response.data;
   if(code === 200) {
-    return {data,msg}
+    return {data,msg};
   }
   else if(code === 401) {
     ElMessage({
@@ -64,18 +64,18 @@ http.interceptors.response.use(function (response) {
     });
     return Promise.reject(msg);
   }
-  return response
+  return response;
 }, function (error) {
   // console.log(error);
   
   // 超出 2xx 范围的状态码都会触发该函数。
   // 对响应错误做点什么
-  ElMessage.error(error.response.data.message || NETWORK_ERROR)
+  ElMessage.error(error.response.data.message || NETWORK_ERROR);
   if (error.status === 401) {
-    return {code:401,msg:"error"}
+    return {code:401,msg:"error"};
   }
   return Promise.reject(error);
 });
 
 
-export default http
+export default http;

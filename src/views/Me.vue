@@ -1,50 +1,50 @@
 <script setup>
-import '@/assets/less/boke.css'
-import { ref,onMounted,reactive,shallowRef,onBeforeUnmount,getCurrentInstance } from "vue"
+import '@/assets/less/boke.css';
+import { ref,onMounted,reactive,shallowRef,onBeforeUnmount,getCurrentInstance } from "vue";
 import { UploadPlAPI,GetBokePlAPI,GetBokeIdAPI } from "@/api/api";
 import '@wangeditor/editor/dist/css/style.css';
 import { ElMessage } from 'element-plus';
-import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
-import {useUserStore} from '@/stores/user'
+import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
+import {useUserStore} from '@/stores/user';
 import { formatTime } from "@/utils/formatTime";
-import Prism from "prismjs"//代码高亮core
-import "prismjs/plugins/line-numbers/prism-line-numbers.min.js"//行号插件
-import "prismjs/themes/prism-tomorrow.min.css"//高亮主题
-import "prismjs/plugins/line-numbers/prism-line-numbers.min.css"//行号插件的样式
-import "prismjs/plugins/toolbar/prism-toolbar.css"//行号插件的样式
-import "prismjs/plugins/toolbar/prism-toolbar.js"//行号插件的样式
-import "prismjs/plugins/show-language/prism-show-language.js"//行号插件的样式
-import "prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.js"//行号插件的样式
-const store = useUserStore()
-const loading = ref(true)
-const id = 1
-const bokeData = ref({})
-const pinlunData = ref([])
+import Prism from "prismjs";//代码高亮core
+import "prismjs/plugins/line-numbers/prism-line-numbers.min.js";//行号插件
+import "prismjs/themes/prism-tomorrow.min.css";//高亮主题
+import "prismjs/plugins/line-numbers/prism-line-numbers.min.css";//行号插件的样式
+import "prismjs/plugins/toolbar/prism-toolbar.css";//行号插件的样式
+import "prismjs/plugins/toolbar/prism-toolbar.js";//行号插件的样式
+import "prismjs/plugins/show-language/prism-show-language.js";//行号插件的样式
+import "prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.js";//行号插件的样式
+const store = useUserStore();
+const loading = ref(true);
+const id = 1;
+const bokeData = ref({});
+const pinlunData = ref([]);
 const getBokeData = async () => {
-  loading.value = true
-  const data = await GetBokeIdAPI(id)
-  const data1 = await GetBokePlAPI(id)
-  bokeData.value = data.data.boke
-  pinlunData.value = data1.data.pinlun  
+  loading.value = true;
+  const data = await GetBokeIdAPI(id);
+  const data1 = await GetBokePlAPI(id);
+  bokeData.value = data.data.boke;
+  pinlunData.value = data1.data.pinlun;  
   // console.log(pinlunData.value);
-  bokeData.value.uploadTime = formatTime(bokeData.value.uploadTime)
-  bokeData.value.loadTime = formatTime(bokeData.value.loadTime)
+  bokeData.value.uploadTime = formatTime(bokeData.value.uploadTime);
+  bokeData.value.loadTime = formatTime(bokeData.value.loadTime);
   pinlunData.value.forEach(item => {
       item.uploadTime = formatTime(item.uploadTime);
   });
-  loading.value = false
-}
-const Back = ref('Back')
-const dialogVisible = ref(false)
+  loading.value = false;
+};
+const Back = ref('Back');
+const dialogVisible = ref(false);
 const handleClose = () => {
-  dialogVisible.value = false
-}
+  dialogVisible.value = false;
+};
 const handleCancel = () => {
-  dialogVisible.value = false
-}
+  dialogVisible.value = false;
+};
 const handleAdd = () => {
-  dialogVisible.value = true
-}
+  dialogVisible.value = true;
+};
 const { proxy } = getCurrentInstance(); // 获取当前组件实例的代理
 const onSubmit = () => {
   if (bokeContent.txt === '') {
@@ -52,40 +52,40 @@ const onSubmit = () => {
         showClose: true,
         message: "请输入正确的内容",
         type: "error",
-      })
-    return
+      });
+    return;
   }
   proxy.$refs['contentBoke'].validate(async (vaild)=>{
     if (vaild) {
-      bokeContent.username = store.userInfo.username ? store.userInfo.username : '游客'
-      bokeContent.bokeId = id
+      bokeContent.username = store.userInfo.username ? store.userInfo.username : '游客';
+      bokeContent.bokeId = id;
       let res = null;
-      res = await UploadPlAPI(bokeContent)
+      res = await UploadPlAPI(bokeContent);
       if (res) {
-        dialogVisible.value = false
-        proxy.$refs['contentBoke'].resetFields()
-        bokeContent.txt = ''
-        getBokeData()
+        dialogVisible.value = false;
+        proxy.$refs['contentBoke'].resetFields();
+        bokeContent.txt = '';
+        getBokeData();
         ElMessage({
         showClose: true,
         message: "发布成功",
         type: "success",
-      })
+      });
       }
     } else {
       ElMessage({
         showClose: true,
         message: "请输入正确的内容",
         type: "error",
-      })
+      });
     }
-  })
-}
+  });
+};
 
 const bokeContent = reactive({
   username: store.userInfo.username ? store.userInfo.username : '游客',
   txt: ''
-})
+});
 const validateContent = (rule, value, callback) => {
   if (value.trim() === '') {
     callback(new Error('内容不能为空'));
@@ -97,15 +97,15 @@ const validateContent = (rule, value, callback) => {
 const rules = reactive({
   username: [{ required: true, message: '内容是必填项', trigger: "blur"}],
   txt: [{ required: true,validator: validateContent, message: '内容是必填项' }]
-})
+});
   // 编辑器实例，必须用 shallowRef，重要！
-  const mode = ref('default')
-  const editorRef = shallowRef()
+  const mode = ref('default');
+  const editorRef = shallowRef();
   const toolbarConfig = {};
   toolbarConfig.excludeKeys = [
     'uploadImage',
     'uploadVideo',
-]
+];
   const editorConfig = { placeholder: '请输入内容...' };
   // 组件销毁时，也及时销毁编辑器，重要！
   onBeforeUnmount(() => {
@@ -116,11 +116,11 @@ const rules = reactive({
       });
   const handleCreated = (editor) => {
     editorRef.value = editor; // 记录 editor 实例，重要！
-  }
+  };
 onMounted(async ()=>{
-  await getBokeData()
-  Prism.highlightAll()
-})
+  await getBokeData();
+  Prism.highlightAll();
+});
 </script>
 
 <template>

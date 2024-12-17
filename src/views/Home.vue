@@ -7,30 +7,30 @@
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <script setup>
-import { ref,onMounted } from "vue"
+import { ref,onMounted } from "vue";
 // import { ref,onMounted,reactive } from "vue"
 import { GetBokeAPI, GetTopAPI } from "@/api/api";
 import { useRouter } from "vue-router";
 import { formatTime } from "@/utils/formatTime";
-const router = useRouter()
-const loading = ref(true)
+const router = useRouter();
+const loading = ref(true);
 const queryObj = {
   username: '',
   pageNum: 1, 
   pageSize: 10,
   ss: '',
   total: 0
-}
-const tableData = ref([])
-const topData = ref([])
+};
+const tableData = ref([]);
+const topData = ref([]);
 const getBokeData = async () => {
-  loading.value = true
-  const data = await GetBokeAPI(queryObj)
-  const data1 = await GetTopAPI()
+  loading.value = true;
+  const data = await GetBokeAPI(queryObj);
+  const data1 = await GetTopAPI();
   // console.log(data1);
-  tableData.value = data.data.bokelist.list
-  topData.value = data1.data.topboke
-  queryObj.total = data.data.count
+  tableData.value = data.data.bokelist.list;
+  topData.value = data1.data.topboke;
+  queryObj.total = data.data.count;
   // console.log(topData.value);
   
   tableData.value.forEach(item => {
@@ -39,22 +39,22 @@ const getBokeData = async () => {
   topData.value.forEach(item => {
       item.loadTime = formatTime(item.loadTime);
   });
-  loading.value = false
-}
+  loading.value = false;
+};
 const getImageUrl = () => {
-  return new URL(`@/assets/Images/bg.jpg`,import.meta.url).href
-} 
+  return new URL(`@/assets/Images/bg.jpg`,import.meta.url).href;
+}; 
 const handleChange1 = (page) => {
-  queryObj.pageNum = page
-  getBokeData()
-}
+  queryObj.pageNum = page;
+  getBokeData();
+};
 const GoBoke = (id) => {
-  router.push(`/boke/${id}`)
-}
-const CaretTop = ref('CaretTop')
+  router.push(`/boke/${id}`);
+};
+const CaretTop = ref('CaretTop');
 onMounted(()=>{
-  getBokeData()
-})
+  getBokeData();
+});
 </script>
 
 <template>

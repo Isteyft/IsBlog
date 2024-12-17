@@ -1,14 +1,14 @@
 <script setup>
-import { ref,getCurrentInstance,onMounted,reactive,onBeforeUnmount,shallowRef,nextTick } from "vue"
+import { ref,getCurrentInstance,onMounted,reactive,onBeforeUnmount,shallowRef,nextTick } from "vue";
 import '@wangeditor/editor/dist/css/style.css';
-import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
+import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
 // import { useRoute } from 'vue-router'
 import { ElMessage,ElMessageBox } from 'element-plus';
 import { formatTime } from "@/utils/formatTime";
 import { GetPlAPI,DelPlAPI,UpdatePlAPI } from "@/api/api";
 import { useRouter } from "vue-router";
-const router = useRouter()
-const tableData = ref([])
+const router = useRouter();
+const tableData = ref([]);
 const tableLabel = reactive([
   {
     prop: "bokeId",
@@ -31,126 +31,126 @@ const tableLabel = reactive([
     prop: "username",
     label: "评论名",
   },
-])
+]);
 const queryObj = {
   username: '',
   pageNum: 1, 
   pageSize: 6,
   ss: '',
   total: 0
-}
+};
 const getPlData = async () => {
   // console.log(config)
-  const data = await GetPlAPI(queryObj)
+  const data = await GetPlAPI(queryObj);
   // console.log(data)
   if (data.code === 401) {
-    router.push('/login')
+    router.push('/login');
   }
-  tableData.value = data.data.pinlunlist.list
-  queryObj.total = data.data.count
+  tableData.value = data.data.pinlunlist.list;
+  queryObj.total = data.data.count;
   tableData.value.forEach(item => {
         item.uploadTime = formatTime(item.uploadTime);
     });
-}
+};
 const { proxy } = getCurrentInstance(); // 获取当前组件实例的代理
 const formInline = reactive({
   keyWord: ''
-})
+});
 const onSerach = () => {
-  queryObj.ss = formInline.keyWord 
-  getPlData()
-}
+  queryObj.ss = formInline.keyWord; 
+  getPlData();
+};
 //切换页面
 const handleChange1 = (page) => {
-  queryObj.pageNum = page
-  getPlData()
-}
+  queryObj.pageNum = page;
+  getPlData();
+};
 //删除
 const handleDelete = (val) => {
   ElMessageBox.confirm("你确认要删除吗").then(async ()=>{
-    await DelPlAPI(val.plid)
+    await DelPlAPI(val.plid);
     ElMessage({
       showClose:true,
       message:'删除成功',
       type:'success'
-    })
-    getPlData()
-  })
+    });
+    getPlData();
+  });
   // console.log(val);
-}
-const action = ref('add')
-const dialogVisible = ref(false)
+};
+const action = ref('add');
+const dialogVisible = ref(false);
 const bokeContent = reactive({
   username: '',
   txt: ''
-})
+});
 const rules = reactive({
   username: [{ required: true, message: "姓名是必填项", trigger: "blur" }],
   txt: [{ required: true, message: '内容是必填项' }]
-})
+});
 const handleClose = () => {
-  dialogVisible.value = false
-}
+  dialogVisible.value = false;
+};
 const handleCancel = () => {
-  dialogVisible.value = false
-}
+  dialogVisible.value = false;
+};
 const onSubmit = () => {
   if (bokeContent.txt === '') {
     ElMessage({
         showClose: true,
         message: "请输入正确的内容",
         type: "error",
-      })
-    return
+      });
+    return;
   }
   proxy.$refs['contentBoke'].validate(async (vaild)=>{
     if (vaild) {
       let res = null;
       if(action.value == "edit"){
-        res = await UpdatePlAPI(bokeContent)
+        res = await UpdatePlAPI(bokeContent);
       }
       if (res) {
-        dialogVisible.value = false
-        proxy.$refs['contentBoke'].resetFields()
-        getPlData()
+        dialogVisible.value = false;
+        proxy.$refs['contentBoke'].resetFields();
+        getPlData();
         ElMessage({
         showClose: true,
         message: "修改成功",
         type: "success",
-      })
+      });
       }
     } else {
       ElMessage({
         showClose: true,
         message: "请输入正确的内容",
         type: "error",
-      })
+      });
     }
-  })
-}
+  });
+};
 const handleEdit = (val) => {
-  action.value = 'edit'
-  dialogVisible.value = true
+  action.value = 'edit';
+  dialogVisible.value = true;
   nextTick(()=>{
         //因为在第一次显示弹窗的时候form组件没有加载出来，如果直接对formUser赋值，这个值会作为form表单的初始值
         //所以使用nextTick，赋值的操作在一个微任务中，这样就可以避免在from表单加载之前赋值
 
-        Object.assign(bokeContent,{...val})
+        Object.assign(bokeContent,{...val});
         //这里需要改变sex数据类型，是因为el-option的value有类型的校验
-    })
-}
+    });
+};
 
   // 编辑器实例，必须用 shallowRef，重要！
-  const mode = ref('default')
-  const editorRef = shallowRef()
+  const mode = ref('default');
+  const editorRef = shallowRef();
   const toolbarConfig = {};
   toolbarConfig.excludeKeys = [
     'uploadImage',
     'uploadVideo',
-]
+];
 const handleMenu = (item) => {
-  router.push("Glcpl/"+item.plid)
-} 
+  router.push("Glcpl/"+item.plid);
+}; 
 const editorConfig = { placeholder: '请输入内容...' };
   // 组件销毁时，也及时销毁编辑器，重要！
   onBeforeUnmount(() => {
@@ -161,10 +161,10 @@ const editorConfig = { placeholder: '请输入内容...' };
       });
   const handleCreated = (editor) => {
     editorRef.value = editor; // 记录 editor 实例，重要！
-  }
+  };
 onMounted(()=>{
-  getPlData()
-})
+  getPlData();
+});
 </script>
 
 <template>

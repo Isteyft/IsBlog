@@ -6,18 +6,18 @@
 </template>
 
 <script setup>
-import {useRouter} from 'vue-router'
-const router =useRouter()
+import {useRouter} from 'vue-router';
+const router =useRouter();
 
 const getImageUrl = (img) => {
     return new URL(`../assets/images/${img}.png`, import.meta.url).href;
-}
+};
 
 const goHome=()=>{
   //go方法：按指定方向访问历史。如果是正数则是路由记录向前跳转，如果是负数则是向后回退
   //这里我们回退两个页面到跳转前的页面
-  router.go(-1)
-}
+  router.go(-1);
+};
 
 </script>
 

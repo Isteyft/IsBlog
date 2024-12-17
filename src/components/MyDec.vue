@@ -8,8 +8,8 @@
 -->
 <script setup>
 const getImageUrl = (user) => {
-  return new URL(`../assets/images/${user}.jpg`,import.meta.url).href
-} 
+  return new URL(`../assets/images/${user}.jpg`,import.meta.url).href;
+};
 </script>
 
 <template>

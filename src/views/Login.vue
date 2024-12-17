@@ -16,28 +16,28 @@
 </template>
 
 <script setup>
-import {reactive} from 'vue'
-import { useRouter } from 'vue-router'
-import {loginAPI} from '@/api/api'
-import {useUserStore} from '@/stores/user'
+import {reactive} from 'vue';
+import { useRouter } from 'vue-router';
+import {loginAPI} from '@/api/api';
+import {useUserStore} from '@/stores/user';
 const user = reactive({
   username: '',
   password: ''
-})
-const router = useRouter()
-const store = useUserStore()
+});
+const router = useRouter();
+const store = useUserStore();
 const handleLogin = async () => {
-  const res = await loginAPI(user)
+  const res = await loginAPI(user);
   store.userInfo = {
     username: user.username,
     token: res.data.data1
-  }
+  };
   if (res.data.data2 === 'admin') {
-    router.push('/admin')
+    router.push('/admin');
   } else {
-    router.push('/home')
+    router.push('/home');
   }
-}
+};
 </script>
 
 <style scoped lang="less">

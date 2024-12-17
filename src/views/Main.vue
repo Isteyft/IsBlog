@@ -7,37 +7,37 @@
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <script setup>
-import {ref,reactive,onMounted,onBeforeUnmount} from 'vue'
-import { useThemeStore } from '@/stores/dark'
-import { Search } from '@element-plus/icons-vue'
+import {ref,reactive,onMounted,onBeforeUnmount} from 'vue';
+import { useThemeStore } from '@/stores/dark';
+import { Search } from '@element-plus/icons-vue';
 import { useRouter } from "vue-router";
-const router = useRouter()
-const themeStore = useThemeStore()
-const buttomIcon = ref('Sunny')
-const Operation = ref('Operation')
+const router = useRouter();
+const themeStore = useThemeStore();
+const buttomIcon = ref('Sunny');
+const Operation = ref('Operation');
 const formInline = reactive({
   keyWord: ''
-})
+});
 const getImageUrl = (user) => {
-  return new URL(`../assets/images/${user}.jpg`,import.meta.url).href
-} 
+  return new URL(`../assets/images/${user}.jpg`,import.meta.url).href;
+}; 
 const handleDark = () => {
   if (buttomIcon.value === "Sunny") {
-    buttomIcon.value = "Moon"
+    buttomIcon.value = "Moon";
   } else {
-    buttomIcon.value = "Sunny"
+    buttomIcon.value = "Sunny";
   }
-  themeStore.toggleTheme()
-}
+  themeStore.toggleTheme();
+};
 const onSerach = () => {
-  if(formInline.keyWord === '') return
-  router.push({ path: `/search/${formInline.keyWord}`})
-  formInline.keyWord = ''
-}
+  if(formInline.keyWord === '') return;
+  router.push({ path: `/search/${formInline.keyWord}`});
+  formInline.keyWord = '';
+};
 const isMenuOpen = ref(false);
 const handleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
-}
+};
 // 关闭菜单的方法
 const closeMenu = () => {
   isMenuOpen.value = false;

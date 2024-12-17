@@ -1,16 +1,16 @@
 <script setup>
-import { ref,getCurrentInstance,onMounted,reactive,nextTick } from "vue"
+import { ref,getCurrentInstance,onMounted,reactive,nextTick } from "vue";
 import '@wangeditor/editor/dist/css/style.css';
 // import { useRoute } from 'vue-router'
 import { ElMessage,ElMessageBox } from 'element-plus';
 import { GetPlAPI,GetImageAPI,DelImageAPI,UpdateImageAPI } from "@/api/api";
-import { genFileId } from 'element-plus'
-import {useUserStore} from '@/stores/user'
+import { genFileId } from 'element-plus';
+import {useUserStore} from '@/stores/user';
 import { useRouter } from "vue-router";
 import { formatTime } from "@/utils/formatTime";
-const router = useRouter()
-const store = useUserStore()
-const tableData = ref([])
+const router = useRouter();
+const store = useUserStore();
+const tableData = ref([]);
 const tableLabel = reactive([
   {
     prop: "wallpaperId",
@@ -38,149 +38,149 @@ const tableLabel = reactive([
     prop: "username",
     label: "上传者",
   },
-])
+]);
 const queryObj = {
   username: '',
   pageNum: 1, 
   pageSize: 3,
   ss: '',
   total: 0
-}
+};
 const getImageData = async () => {
-  const test = await GetPlAPI(queryObj)
+  const test = await GetPlAPI(queryObj);
   // console.log(data)
   if (test.code === 401) {
-    router.push('/login')
+    router.push('/login');
   }
   // console.log(config)
-  const data = await GetImageAPI(queryObj)
+  const data = await GetImageAPI(queryObj);
   // console.log(data)
-  tableData.value = data.data.wallpaperlist.list
-  queryObj.total = data.data.count
+  tableData.value = data.data.wallpaperlist.list;
+  queryObj.total = data.data.count;
   tableData.value.forEach(item => {
-        item.wallpaper = "https://isteyft.top:3000/ServerImage/"+item.wallpaperId
+        item.wallpaper = "https://isteyft.top:3000/ServerImage/"+item.wallpaperId;
         item.uploadTime = formatTime(item.uploadTime);
     });
-}
+};
 const { proxy } = getCurrentInstance(); // 获取当前组件实例的代理
 const formInline = reactive({
   keyWord: ''
-})
+});
 const onSerach = () => {
-  queryObj.ss = formInline.keyWord 
-  getImageData()
-}
+  queryObj.ss = formInline.keyWord; 
+  getImageData();
+};
 //切换页面
 const handleChange1 = (page) => {
-  queryObj.pageNum = page
-  getImageData()
-}
+  queryObj.pageNum = page;
+  getImageData();
+};
 //删除
 const handleDelete = (val) => {
   ElMessageBox.confirm("你确认要删除吗").then(async ()=>{
-    await DelImageAPI(val.wallpaperId)
+    await DelImageAPI(val.wallpaperId);
     ElMessage({
       showClose:true,
       message:'删除成功',
       type:'success'
-    })
-    getImageData()
-  })
+    });
+    getImageData();
+  });
   // console.log(val);
-}
-const action = ref('add')
-const actionmethod = ref('post')
-const actionhref = ref('https://isteyft.top:8888/v2/wp/upload')
-const dialogVisible = ref(false)
+};
+const action = ref('add');
+const actionmethod = ref('post');
+const actionhref = ref('https://isteyft.top:8888/v2/wp/upload');
+const dialogVisible = ref(false);
 const bokeContent = reactive({
   labels: ''
-})
+});
 const rules = reactive({
   labels: [{ required: true, message: "标题是必填项", trigger: "blur" }],
   tag: [{ required: true, message: "标签是选填项", trigger: "blur" }],
-})
+});
 const handleClose = () => {
-  dialogVisible.value = false
-}
+  dialogVisible.value = false;
+};
 const handleCancel = () => {
-  dialogVisible.value = false
-}
+  dialogVisible.value = false;
+};
 const handleAdd = () => {
-  action.value = 'add'
-  actionhref.value = 'https://isteyft.top:8888/v2/wp/upload'
-  actionmethod.value = 'post'
-  dialogVisible.value = true
-}
-const token = store.userInfo.token
-const heads = ref({'Authorization':`Bearer ${token}`})
+  action.value = 'add';
+  actionhref.value = 'https://isteyft.top:8888/v2/wp/upload';
+  actionmethod.value = 'post';
+  dialogVisible.value = true;
+};
+const token = store.userInfo.token;
+const heads = ref({'Authorization':`Bearer ${token}`});
 let res = null;
 const handleUploadSuccess = (val) => {
-  res = val
+  res = val;
   if (res) {
-        dialogVisible.value = false
-        proxy.$refs['contentBoke'].resetFields()
-        bokeContent.labels = ''
-        getImageData()
+        dialogVisible.value = false;
+        proxy.$refs['contentBoke'].resetFields();
+        bokeContent.labels = '';
+        getImageData();
       }
-}
+};
 const handleUploadError = (val) => {
-  res = val
+  res = val;
   // console.log(res);
   ElMessage({
     showClose: true,
     message: "请输入正确的内容",
     type: "error",
-  })
-}
+  });
+};
 const onSubmit = () => {
   proxy.$refs['contentBoke'].validate(async (vaild)=>{
     if (vaild) {
-      bokeContent.username = store.userInfo.username
-      upload.value.data = bokeContent.value
+      bokeContent.username = store.userInfo.username;
+      upload.value.data = bokeContent.value;
        if (action.value === 'add') {
-        upload.value.submit()
+        upload.value.submit();
       }
       if(action.value == 'edit'){
-        upload.value.submit()
-        res = await UpdateImageAPI(bokeContent)
+        upload.value.submit();
+        res = await UpdateImageAPI(bokeContent);
       }
       if (res) {
-        dialogVisible.value = false
-        proxy.$refs['contentBoke'].resetFields()
-        bokeContent.labels = ''
-        getImageData()
+        dialogVisible.value = false;
+        proxy.$refs['contentBoke'].resetFields();
+        bokeContent.labels = '';
+        getImageData();
       }
     } else {
       ElMessage({
         showClose: true,
         message: "请输入正确的内容",
         type: "error",
-      })
+      });
     }
-  })
-}
+  });
+};
 const handleEdit = (val) => {
-  action.value = 'edit'
-  actionhref.value = 'https://isteyft.top:8888/v2/wp/update'
-  actionmethod.value = 'PUT'
-  dialogVisible.value = true
+  action.value = 'edit';
+  actionhref.value = 'https://isteyft.top:8888/v2/wp/update';
+  actionmethod.value = 'PUT';
+  dialogVisible.value = true;
   nextTick(()=>{
         //因为在第一次显示弹窗的时候form组件没有加载出来，如果直接对formUser赋值，这个值会作为form表单的初始值
         //所以使用nextTick，赋值的操作在一个微任务中，这样就可以避免在from表单加载之前赋值
-        Object.assign(bokeContent,{...val})
+        Object.assign(bokeContent,{...val});
         //这里需要改变sex数据类型，是因为el-option的value有类型的校验
-    })
-}
-const upload = ref()
+    });
+};
+const upload = ref();
 const handleExceed = function(files) {
   upload.value.clearFiles();
   const file = files[0];
   file.uid = genFileId();
   upload.value.handleStart(file);
-}
+};
 onMounted(()=>{
-  getImageData()
-})
+  getImageData();
+});
 </script>
 
 <template>
